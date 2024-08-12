@@ -18,6 +18,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const firestore = useFirestore();
+
 // const analytics = getAnalytics(app);
 
 const auth = getAuth();
@@ -31,7 +33,7 @@ const createUserEntry = (uid) => {
   });
 };
 
-const create = () => {
+const createUser = () => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed up
@@ -53,6 +55,8 @@ const getUser = () => {
       // Signed in
       const user = userCredential.user;
       userCredential.user.uid;
+
+      // Get firestore
 
       // ...
     })

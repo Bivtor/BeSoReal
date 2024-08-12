@@ -34,7 +34,7 @@ class _PostState extends State<Post> {
             children: [
               // Friend Icon
               const CircleAvatar(
-                backgroundImage: AssetImage('assets/avatar.png'),
+                backgroundImage: AssetImage('avatar.png'),
                 radius: 20.0,
               ),
               const SizedBox(width: 8.0),
@@ -76,8 +76,8 @@ class _PostState extends State<Post> {
               // image
               Image.asset(
                 focusSelfie
-                    ? 'assets/post_image2.png'
-                    : 'assets/post_image.png',
+                    ? 'post_image2.png'
+                    : 'post_image.png',
                 fit: BoxFit.cover,
               ),
 
@@ -176,8 +176,8 @@ class _PostState extends State<Post> {
                         children: [
                           Image.asset(
                             focusSelfie
-                                ? 'assets/post_image.png'
-                                : 'assets/post_image2.png',
+                                ? 'post_image.png'
+                                : 'post_image2.png',
                             fit: BoxFit.cover,
                           ),
                           if (!widget.postedToday)
@@ -232,7 +232,7 @@ class _PostState extends State<Post> {
             Row(
               children: [
                 const CircleAvatar(
-                  backgroundImage: AssetImage('assets/avatar.png'),
+                  backgroundImage: AssetImage('avatar.png'),
                   radius: 20.0,
                 ),
                 const SizedBox(width: 8.0),

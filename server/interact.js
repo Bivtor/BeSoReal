@@ -67,3 +67,5 @@ const getUser = () => {
 };
 
 getUser();
+
+// Example comment

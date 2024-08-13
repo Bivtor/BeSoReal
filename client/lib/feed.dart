@@ -1,6 +1,7 @@
 import 'package:client/addFriend.dart';
-import 'package:client/post.dart';
+import 'package:client/widgets/post.dart';
 import 'package:flutter/material.dart';
+import 'package:client/widgets/header.dart';
 
 class Feed extends StatefulWidget {
   const Feed({super.key});
@@ -28,44 +29,11 @@ class _FeedState extends State<Feed> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: Header(context),
       body: Stack(
         children: [
           CustomScrollView(
             slivers: [
-              SliverAppBar(
-                pinned: true,
-                backgroundColor: Colors.transparent,
-                title: const DefaultTextStyle(
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                  child: Text('BeSoReal'),
-                ),
-                centerTitle: true,
-                leading: IconButton(
-                  icon: const Icon(Icons.people, color: Colors.white),
-                  onPressed: () => {
-                    // go to friends page
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const AddFriend())),
-                  },
-                ),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.calendar_month, color: Colors.white),
-                    onPressed: () => {
-                      // go to calendar page
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.settings, color: Colors.white),
-                    onPressed: () => {
-                      // go to settings page
-                    },
-                  ),
-                ],
-              ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) => Post(

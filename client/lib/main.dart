@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:client/feed.dart';
+// import 'package:client/feed.dart';
 import 'package:client/login.dart';
 import 'package:flutter/material.dart';
 
@@ -14,14 +14,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo banana',
+      title: 'Flutter Demo',
 
       // hide debug banner
       debugShowCheckedModeBanner: false,
 
       // allow scrolling in chrome for debugging
       scrollBehavior: const MaterialScrollBehavior().copyWith(
-        dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch, PointerDeviceKind.stylus, PointerDeviceKind.unknown},
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.stylus,
+          PointerDeviceKind.unknown
+        },
       ),
 
       theme: ThemeData(
@@ -46,5 +51,4 @@ class MyApp extends StatelessWidget {
       home: const Login(),
     );
   }
-
 }

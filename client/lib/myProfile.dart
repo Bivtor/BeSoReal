@@ -1,3 +1,4 @@
+import 'package:client/widgets/myPosts.dart';
 import 'package:flutter/material.dart';
 import 'package:client/widgets/header.dart';
 
@@ -11,6 +12,7 @@ class MyProfile extends StatefulWidget {
 class _MyProfileState extends State<MyProfile> {
   // final TextEditingController _usernameController = TextEditingController();
   String? _usernameError;
+  String? _username;
 
   @override
   void initState() {
@@ -25,11 +27,19 @@ class _MyProfileState extends State<MyProfile> {
         backgroundColor: Colors.black,
         body: Center(
           child: Padding(
-            padding: const EdgeInsets.all(26.0),
+            padding: const EdgeInsets.all(25.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text('BeSoReal'),
+                const CircleAvatar(
+                  radius: 75.0,
+                  backgroundImage: AssetImage('avatar.png'),
+                ),
+                Text('$_username'), // My Username
+                Padding(
+                  padding: const EdgeInsets.only(top: 0.0),
+                  child: AllMyPosts(),
+                ),
                 if (_usernameError != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),

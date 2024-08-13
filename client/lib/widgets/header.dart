@@ -10,22 +10,28 @@ AppBar Header(context) {
     title: GestureDetector(
       onTap: () {
         // Goto Home feed when you tap the title
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const Feed()));
+        Navigator.popUntil(
+          context,
+          (route) => route.isFirst,
+        );
       },
-      child: const DefaultTextStyle(
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: const DefaultTextStyle(
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+          child: Text('BeSoReal'),
         ),
-        child: Text('BeSoReal'),
       ),
     ),
     centerTitle: true,
     leading: IconButton(
       icon: const Icon(Icons.people, color: Colors.white),
       onPressed: () {
+        // Navigate to Add Friends page\
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const AddFriend()),

@@ -1,6 +1,8 @@
 import 'dart:ui';
 // import 'package:client/feed.dart';
+import 'package:client/addFriend.dart';
 import 'package:client/login.dart';
+import 'package:client/myProfile.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,6 +17,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      routes: {
+        '/addFriend': (context) => AddFriend(),
+        '/myprofile': (context) => MyProfile(),
+      },
 
       // hide debug banner
       debugShowCheckedModeBanner: false,

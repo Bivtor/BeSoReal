@@ -1,6 +1,6 @@
-import 'package:client/widgets/myPosts.dart';
 import 'package:flutter/material.dart';
 import 'package:client/widgets/header.dart';
+import 'package:client/widgets/myPosts.dart';
 
 class MyProfile extends StatefulWidget {
   const MyProfile({super.key});
@@ -35,11 +35,24 @@ class _MyProfileState extends State<MyProfile> {
                   radius: 75.0,
                   backgroundImage: AssetImage('avatar.png'),
                 ),
-                Text('$_username'), // My Username
+                // My Username
+                // TODO add data fetching
                 Padding(
-                  padding: const EdgeInsets.only(top: 0.0),
-                  child: AllMyPosts(),
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(
+                    'Lebron James',
+                    style: TextStyle(
+                      color: Colors.white, // Set the text color to white
+                      fontSize: 26.0, // Set the font size larger than normal
+                      fontWeight: FontWeight.bold, // Make the text bold
+                    ),
+                  ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: AllMyPosts(context),
+                ), // History of my posts from the AllMyPosts widget
+                // TODO pass data from firebase, as well as add argument to accept posts[] object
                 if (_usernameError != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
@@ -56,7 +69,6 @@ class _MyProfileState extends State<MyProfile> {
     );
   }
 }
-
 
 // IconButton(
 //                     icon: const Icon(Icons.settings, color: Colors.white),

@@ -1,7 +1,23 @@
-import 'package:client/feed.dart';
 import 'package:flutter/material.dart';
 import 'package:client/myProfile.dart';
 import 'package:client/addFriend.dart';
+
+void doPageSwitch(context, newRoute) {
+  print("new route name: " + newRoute.runtimeType.toString());
+  print("old route name: ");
+  print(ModalRoute.of(context)?.settings.name);
+
+  if (ModalRoute.of(context)?.settings.name ==
+      newRoute.runtimeType.toString()) {
+    // The current route is the same as the new route, so do nothing
+  } else {
+    // Navigate to the new route
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => newRoute),
+    );
+  }
+}
 
 AppBar Header(context) {
   return AppBar(
@@ -31,11 +47,12 @@ AppBar Header(context) {
     leading: IconButton(
       icon: const Icon(Icons.people, color: Colors.white),
       onPressed: () {
-        // Navigate to Add Friends page\
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const AddFriend()),
-        );
+        // Navigate to Add Friends page
+        doPageSwitch(context, AddFriend());
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => const AddFriend()),
+        // );
       },
     ),
     actions: [

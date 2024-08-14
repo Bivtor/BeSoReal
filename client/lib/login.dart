@@ -79,7 +79,7 @@ class _LoginState extends State<Login> {
     } catch (e) {
       // Handle errors such as invalid credentials
       print('Error occurred: $e');
-      print(e);
+      // Set error state to false
       setState(() {
         _emailError = 'Failed to fetch account';
       });

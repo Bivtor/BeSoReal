@@ -1,5 +1,6 @@
 import 'package:client/login.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -12,6 +13,7 @@ class _SignupState extends State<Signup> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordController2 = TextEditingController();
+  String? _signupError;
   String? _emailError;
   String? _passwordError;
 
@@ -34,8 +36,48 @@ class _SignupState extends State<Signup> {
       return;
     }
 
-    // String email = _emailController.text;
-    // String password = _passwordController.text;
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    // register account with firebase
+
+    FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    )
+        .then((UserCredential userCredential) {
+      //print('User created: ${userCredential.user!.email}');
+
+      // show toast
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Signup successful'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+
+      // go to login page
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const Login()));
+    }).catchError((error) {
+      setState(() {
+        switch (error.code) {
+          case 'email-already-in-use':
+            _signupError = 'Email is already in use';
+            break;
+          case 'invalid-email':
+            _signupError = 'Email is invalid';
+            break;
+          case 'weak-password':
+            _signupError = 'Password is too weak';
+            break;
+          default:
+            _signupError = 'An error occurred';
+            break;
+        }
+      });
+    });
 
     // TODO register account with server
   }
@@ -109,6 +151,14 @@ class _SignupState extends State<Signup> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              if (_signupError != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    _signupError!,
+                    style: const TextStyle(color: Colors.red, fontSize: 12),
+                  ),
+                ),
               if (_emailError != null)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),

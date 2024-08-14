@@ -3,15 +3,52 @@ import 'dart:ui';
 import 'package:client/addFriend.dart';
 import 'package:client/login.dart';
 import 'package:client/myProfile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:client/feed.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
+  // Initialize Firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+
+  var first = true;
+
+  FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    if (first) {
+      first = false;
+      return;
+    }
+
+    if (user == null) {
+      // go to login page
+      print('User is currently signed out!');
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        navigatorKey.currentState?.pushReplacement(
+          MaterialPageRoute(builder: (context) => const Login()),
+        );
+      });
+    } else {
+      // go to feed page
+      print('User is signed in! ${user.email}');
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        navigatorKey.currentState?.pushReplacement(
+          MaterialPageRoute(builder: (context) => const Feed()),
+        );
+      });
+    }
+  });
+
+  // Run the app
   runApp(const MyApp());
 }
 
@@ -27,6 +64,7 @@ class MyApp extends StatelessWidget {
         '/addFriend': (context) => AddFriend(),
         '/myprofile': (context) => MyProfile(),
       },
+      navigatorKey: navigatorKey,
 
       // hide debug banner
       debugShowCheckedModeBanner: false,

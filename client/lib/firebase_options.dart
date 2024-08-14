@@ -85,5 +85,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'besoreal-f5fd5.appspot.com',
     measurementId: 'G-FMPM69QS05',
   );
-
 }

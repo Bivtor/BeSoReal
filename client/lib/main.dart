@@ -1,9 +1,51 @@
 import 'dart:ui';
 import 'package:client/feed.dart';
 import 'package:client/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+void main() async {
+  // Initialize Firebase
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+
+  var first = true;
+
+  FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    if (first) {
+      first = false;
+      return;
+    }
+
+    if (user == null) {
+      // go to login page
+      print('User is currently signed out!');
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        navigatorKey.currentState?.pushReplacement(
+          MaterialPageRoute(builder: (context) => const Login()),
+        );
+      });
+    } else {
+      // go to feed page
+      print('User is signed in! ${user.email}');
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        navigatorKey.currentState?.pushReplacement(
+          MaterialPageRoute(builder: (context) => const Feed()),
+        );
+      });
+    }
+  });
+
+  // Run the app
   runApp(const MyApp());
 }
 
@@ -14,14 +56,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo banana',
+      navigatorKey: navigatorKey,
 
       // hide debug banner
       debugShowCheckedModeBanner: false,
 
       // allow scrolling in chrome for debugging
       scrollBehavior: const MaterialScrollBehavior().copyWith(
-        dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch, PointerDeviceKind.stylus, PointerDeviceKind.unknown},
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.stylus,
+          PointerDeviceKind.unknown
+        },
       ),
 
       theme: ThemeData(
@@ -46,5 +93,4 @@ class MyApp extends StatelessWidget {
       home: const Login(),
     );
   }
-
 }

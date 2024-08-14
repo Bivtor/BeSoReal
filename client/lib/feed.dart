@@ -1,5 +1,7 @@
 import 'package:client/addFriend.dart';
+import 'package:client/login.dart';
 import 'package:client/post.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Feed extends StatefulWidget {
@@ -12,6 +14,11 @@ class Feed extends StatefulWidget {
 class _FeedState extends State<Feed> {
   // TODO get this info from the server
   var postedToday = false;
+
+  Future<void> _signOut() async {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Login()));
+    await FirebaseAuth.instance.signOut();
+  }
 
   void updatePostedToday(bool value) {
     setState(() {
@@ -62,6 +69,7 @@ class _FeedState extends State<Feed> {
                     icon: const Icon(Icons.settings, color: Colors.white),
                     onPressed: () => {
                       // go to settings page
+                      _signOut(),
                     },
                   ),
                 ],

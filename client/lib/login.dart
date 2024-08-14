@@ -1,5 +1,5 @@
-import 'package:client/feed.dart';
 import 'package:client/signup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -27,20 +27,48 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 
-  void _login() {
+  void _login() async {
 
     // do nothing if there are errors
     if (_emailError != null || _passwordError != null) {
       return;
     }
 
-    // String email = _emailController.text;
-    // String password = _passwordController.text;
+    String email = _emailController.text;
+    String password = _passwordController.text;
     
-    // TODO validate email and password with server
+    // validate email and password with firebase
+
+    try {
+  UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+    email: email,
+    password: password
+  );
+} on FirebaseAuthException catch (error) {
+  
+  print(error);
+
+  setState(() {
+    switch(error.code) {
+    case 'user-not-found':
+      _emailError = 'No user found for that email';
+      break;
+    case 'wrong-password':
+      _emailError = 'Incorrect password';
+      break;
+    case 'invalid-email':
+      _emailError = 'Invalid email';
+      break;
+    default:
+      _emailError = 'An error occurred';
+      break;
+    }
+  });
+
+}
 
     // go to feed page
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Feed()));
+    //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Feed()));
   }
 
   void _signup() {

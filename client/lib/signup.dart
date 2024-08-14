@@ -29,7 +29,6 @@ class _SignupState extends State<Signup> {
   }
 
   void _signup() {
-
     // do nothing if there are errors
     if (_emailError != null || _passwordError != null) {
       return;
@@ -37,13 +36,13 @@ class _SignupState extends State<Signup> {
 
     // String email = _emailController.text;
     // String password = _passwordController.text;
-    
-    // TODO register account with server
 
+    // TODO register account with server
   }
 
   void _login() {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Login()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const Login()));
   }
 
   void _validateEmail() {
@@ -54,7 +53,9 @@ class _SignupState extends State<Signup> {
         return;
       }
 
-      final bool emailValid = RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$").hasMatch(email);
+      final bool emailValid = RegExp(
+              r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$")
+          .hasMatch(email);
       if (!emailValid) {
         _emailError = 'Email is invalid';
         return;
@@ -108,16 +109,14 @@ class _SignupState extends State<Signup> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-
               if (_emailError != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Text(
-                  _emailError!,
-                  style: const TextStyle(color: Colors.red, fontSize: 12),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    _emailError!,
+                    style: const TextStyle(color: Colors.red, fontSize: 12),
+                  ),
                 ),
-              ),
-
               TextField(
                 controller: _emailController,
                 onChanged: (_) => _validateEmail(),
@@ -131,20 +130,21 @@ class _SignupState extends State<Signup> {
                     borderSide: BorderSide(color: Colors.blue),
                   ),
                   prefixIcon: const Icon(Icons.person), // left icon
-                  suffixIcon: (_emailError == null && _emailController.text.isNotEmpty) ? const Icon(Icons.check) : null, // right icon
+                  suffixIcon:
+                      (_emailError == null && _emailController.text.isNotEmpty)
+                          ? const Icon(Icons.check)
+                          : null, // right icon
                 ),
               ),
               const SizedBox(height: 16.0),
-
               if (_passwordError != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Text(
-                  _passwordError!,
-                  style: const TextStyle(color: Colors.red, fontSize: 12),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    _passwordError!,
+                    style: const TextStyle(color: Colors.red, fontSize: 12),
+                  ),
                 ),
-              ),
-
               TextField(
                 controller: _passwordController,
                 onChanged: (_) => _validatePassword(),
@@ -159,12 +159,13 @@ class _SignupState extends State<Signup> {
                     borderSide: BorderSide(color: Colors.blue),
                   ),
                   prefixIcon: const Icon(Icons.lock), // left icon
-                  suffixIcon: (_passwordError == null && _passwordController.text.isNotEmpty) ? const Icon(Icons.check) : null, // right icon
+                  suffixIcon: (_passwordError == null &&
+                          _passwordController.text.isNotEmpty)
+                      ? const Icon(Icons.check)
+                      : null, // right icon
                 ),
               ),
-
               const SizedBox(height: 24.0),
-
               TextField(
                 controller: _passwordController2,
                 onChanged: (_) => _validatePassword(),
@@ -179,10 +180,12 @@ class _SignupState extends State<Signup> {
                     borderSide: BorderSide(color: Colors.blue),
                   ),
                   prefixIcon: const Icon(Icons.lock), // left icon
-                  suffixIcon: (_passwordError == null && _passwordController.text.isNotEmpty) ? const Icon(Icons.check) : null, // right icon
+                  suffixIcon: (_passwordError == null &&
+                          _passwordController.text.isNotEmpty)
+                      ? const Icon(Icons.check)
+                      : null, // right icon
                 ),
               ),
-
               const SizedBox(height: 24.0),
               SizedBox(
                 width: double.infinity,

@@ -1,5 +1,7 @@
 import 'package:client/addFriend.dart';
 import 'package:client/widgets/post.dart';
+import 'package:client/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:client/widgets/header.dart';
 
@@ -13,6 +15,12 @@ class Feed extends StatefulWidget {
 class _FeedState extends State<Feed> {
   // TODO get this info from the server
   var postedToday = false;
+
+  Future<void> _signOut() async {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const Login()));
+    await FirebaseAuth.instance.signOut();
+  }
 
   void updatePostedToday(bool value) {
     setState(() {
@@ -34,6 +42,44 @@ class _FeedState extends State<Feed> {
         children: [
           CustomScrollView(
             slivers: [
+              SliverAppBar(
+                pinned: true,
+                backgroundColor: Colors.transparent,
+                title: const DefaultTextStyle(
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  child: Text('BeSoReal'),
+                ),
+                centerTitle: true,
+                leading: IconButton(
+                  icon: const Icon(Icons.people, color: Colors.white),
+                  onPressed: () => {
+                    // go to friends page
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddFriend())),
+                  },
+                ),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.calendar_month, color: Colors.white),
+                    onPressed: () => {
+                      // go to calendar page
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.settings, color: Colors.white),
+                    onPressed: () => {
+                      // go to settings page
+                      _signOut(),
+                    },
+                  ),
+                ],
+              ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) => Post(

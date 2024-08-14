@@ -42,12 +42,19 @@ class _LoginState extends State<Login> {
       return;
     }
     if (email.length == 0 || password.length == 0) {
+      setState(() {
+        _emailError = 'Blank email or password';
+      });
       print('Blank password or email');
+
       return;
+    } else {
+      setState(() {
+        _emailError = null;
+      });
     }
 
-    // TODO: Validate email and password format before proceeding
-
+    // After password checks attempt sign in through Firebase Auth
     try {
       // Attempt to sign in with Firebase Auth
       final userCredential =
@@ -73,6 +80,9 @@ class _LoginState extends State<Login> {
       // Handle errors such as invalid credentials
       print('Error occurred: $e');
       print(e);
+      setState(() {
+        _emailError = 'Failed to fetch account';
+      });
       // Optionally show an error message to the user
     }
   }

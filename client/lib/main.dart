@@ -1,9 +1,17 @@
 import 'dart:ui';
-import 'package:client/feed.dart';
+// import 'package:client/feed.dart';
+import 'package:client/addFriend.dart';
 import 'package:client/login.dart';
+import 'package:client/myProfile.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -14,14 +22,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo banana',
+      title: 'Flutter Demo',
+      routes: {
+        '/addFriend': (context) => AddFriend(),
+        '/myprofile': (context) => MyProfile(),
+      },
 
       // hide debug banner
       debugShowCheckedModeBanner: false,
 
       // allow scrolling in chrome for debugging
       scrollBehavior: const MaterialScrollBehavior().copyWith(
-        dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch, PointerDeviceKind.stylus, PointerDeviceKind.unknown},
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.stylus,
+          PointerDeviceKind.unknown
+        },
       ),
 
       theme: ThemeData(
@@ -46,5 +63,4 @@ class MyApp extends StatelessWidget {
       home: const Login(),
     );
   }
-
 }

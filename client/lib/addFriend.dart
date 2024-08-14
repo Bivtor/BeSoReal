@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:client/widgets/header.dart';
 
 class AddFriend extends StatefulWidget {
   const AddFriend({super.key});
@@ -19,6 +20,7 @@ class _AddFriendState extends State<AddFriend> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: Header(context),
       backgroundColor: Colors.black,
       body: Center(
         child: Padding(

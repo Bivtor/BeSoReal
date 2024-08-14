@@ -74,18 +74,20 @@ class _PostState extends State<Post> {
             alignment: Alignment.center,
             children: [
               // image
-              Image.asset(
-                focusSelfie
-                    ? 'post_image2.png'
-                    : 'post_image.png',
-                fit: BoxFit.cover,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15.0),
+                child: Image.asset(
+                  focusSelfie ? 'post_image2.png' : 'post_image.png',
+                  fit: BoxFit.cover,
+                ),
               ),
 
-// when hasn't posted today
+// Blur data when hasn't posted today
               if (!widget.postedToday) ...[
                 // blur
                 Positioned.fill(
-                  child: ClipRect(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15.0),
                     child: BackdropFilter(
                       filter: ImageFilter.blur(
                           sigmaX: 10.0, sigmaY: 10.0), // Blur intensity
@@ -118,7 +120,7 @@ class _PostState extends State<Post> {
 
                     const SizedBox(height: 20.0),
 
-                    // help text
+                    // Static Tooltip
                     const DefaultTextStyle(
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -131,7 +133,7 @@ class _PostState extends State<Post> {
 
                     const SizedBox(height: 20.0),
 
-                    // button
+                    // Post Now Button
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
@@ -168,21 +170,24 @@ class _PostState extends State<Post> {
                   child: Container(
                       width: 200,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black, width: 4.0),
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                       child: Stack(
                         alignment: Alignment.bottomRight,
                         children: [
-                          Image.asset(
-                            focusSelfie
-                                ? 'post_image.png'
-                                : 'post_image2.png',
-                            fit: BoxFit.cover,
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(15.0),
+                            child: Image.asset(
+                              focusSelfie
+                                  ? 'post_image.png'
+                                  : 'post_image2.png',
+                              fit: BoxFit.cover,
+                            ),
                           ),
                           if (!widget.postedToday)
                             Positioned.fill(
-                              child: ClipRect(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15.0),
                                 child: BackdropFilter(
                                   filter: ImageFilter.blur(
                                       sigmaX: 10.0,

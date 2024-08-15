@@ -34,7 +34,7 @@ class _PostState extends State<Post> {
             children: [
               // Friend Icon
               const CircleAvatar(
-                backgroundImage: AssetImage('avatar.png'),
+                backgroundImage: AssetImage('assets/avatar.png'),
                 radius: 20.0,
               ),
               const SizedBox(width: 8.0),
@@ -77,7 +77,7 @@ class _PostState extends State<Post> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
                 child: Image.asset(
-                  focusSelfie ? 'post_image2.png' : 'post_image.png',
+                  focusSelfie ? 'assets/post_image2.png' : 'assets/post_image.png',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -179,8 +179,8 @@ class _PostState extends State<Post> {
                             borderRadius: BorderRadius.circular(15.0),
                             child: Image.asset(
                               focusSelfie
-                                  ? 'post_image.png'
-                                  : 'post_image2.png',
+                                  ? 'assets/post_image.png'
+                                  : 'assets/post_image2.png',
                               fit: BoxFit.cover,
                             ),
                           ),

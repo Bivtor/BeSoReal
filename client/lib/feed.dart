@@ -42,44 +42,6 @@ class _FeedState extends State<Feed> {
         children: [
           CustomScrollView(
             slivers: [
-              SliverAppBar(
-                pinned: true,
-                backgroundColor: Colors.transparent,
-                title: const DefaultTextStyle(
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                  child: Text('BeSoReal'),
-                ),
-                centerTitle: true,
-                leading: IconButton(
-                  icon: const Icon(Icons.people, color: Colors.white),
-                  onPressed: () => {
-                    // go to friends page
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AddFriend())),
-                  },
-                ),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.calendar_month, color: Colors.white),
-                    onPressed: () => {
-                      // go to calendar page
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.settings, color: Colors.white),
-                    onPressed: () => {
-                      // go to settings page
-                      _signOut(),
-                    },
-                  ),
-                ],
-              ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) => Post(

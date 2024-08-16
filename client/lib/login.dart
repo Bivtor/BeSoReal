@@ -2,13 +2,14 @@ import 'package:client/feed.dart';
 import 'package:client/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+// TODO REMOVE
+// Login button autofills victor@victor.victor
+const DEBUG_MODE = true;
 
 class Login extends StatefulWidget {
   const Login({super.key});
-
   @override
   State<Login> createState() => _LoginState();
 }
@@ -32,6 +33,12 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> _login(BuildContext context) async {
+    // TODO REMOVE
+    if (DEBUG_MODE) {
+      _emailController.text = 'victor@victor.victor';
+      _passwordController.text = 'Shit22';
+    }
+
     // Retrieve email and password from controllers
     String email = _emailController.text.trim();
     String password = _passwordController.text;
@@ -67,7 +74,16 @@ class _LoginState extends State<Login> {
 
       // Check if user is not null and print the UID
       if (user != null) {
-        print(user.uid);
+        // If the user is not null get the object matching their UID from Firestore and pass it as props
+        // Create firestore entry with credentials
+        var db = FirebaseFirestore.instance;
+
+        // Target 'userdata' collection
+        final userdata = db.collection("userdata");
+
+        // Get user uid
+        final firestore_user = userdata.doc(user.uid);
+        print(firestore_user);
         // Navigate to Feed page
         Navigator.pushReplacement(
           context,

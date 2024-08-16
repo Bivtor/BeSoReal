@@ -11,7 +11,7 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordController2 = TextEditingController();
@@ -26,7 +26,7 @@ class _SignupState extends State<Signup> {
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _userNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _passwordController2.dispose();
@@ -39,7 +39,7 @@ class _SignupState extends State<Signup> {
       return;
     }
 
-    String name = _nameController.text;
+    String name = _userNameController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
 
@@ -56,12 +56,12 @@ class _SignupState extends State<Signup> {
       var db = FirebaseFirestore.instance;
 
       // Create a new user with a first and last name
-      final data = {"user": name, 'email': email};
+      final data = {"username": name, 'email': email};
 
-      // Add a new document with a generated ID
+      // Add a new document user uid as ID
       db.collection("userdata").doc(userCredential.user!.uid).set(data);
 
-      // show toast
+      // Show toast
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Signup successful'),
@@ -69,9 +69,17 @@ class _SignupState extends State<Signup> {
         ),
       );
 
+      // TODO Catch?
+      //       if (e.code == 'weak-password') {
+      //   print('The password provided is too weak.');
+      // } else if (e.code == 'email-already-in-use') {
+      //   print('The account already exists for that email.');
+      // }
+
       // go to login page
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const Login()));
+      // go to login page
     }).catchError((error) {
       setState(() {
         switch (error.code) {
@@ -180,7 +188,7 @@ class _SignupState extends State<Signup> {
 
               // Name Field
               TextField(
-                controller: _nameController,
+                controller: _userNameController,
                 style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   labelText: 'Name',
@@ -192,7 +200,7 @@ class _SignupState extends State<Signup> {
                   ),
                   prefixIcon:
                       const Icon(Icons.account_circle_outlined), // left icon
-                  suffixIcon: (_nameController.text.isNotEmpty)
+                  suffixIcon: (_userNameController.text.isNotEmpty)
                       ? const Icon(Icons.check)
                       : null, // right icon
                 ),

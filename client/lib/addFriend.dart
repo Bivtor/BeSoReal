@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:client/widgets/header.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddFriend extends StatefulWidget {
   const AddFriend({super.key});
@@ -9,12 +10,62 @@ class AddFriend extends StatefulWidget {
 }
 
 class _AddFriendState extends State<AddFriend> {
-  final TextEditingController _usernameController = TextEditingController();
-  String? _usernameError;
+  final TextEditingController _userNameController = TextEditingController();
+  String? _userNameError;
+  bool _foundUser = false;
+  String _foundUserText = '';
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _userNameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _addFriend(BuildContext context) async {
+    // Reset found user message
+    setState(() {
+      _foundUser = false;
+    });
+    // Get username
+    String username = _userNameController.text.trim();
+
+    if (username.length < 1) {
+      setState(() {
+        _userNameError = 'Field Cannot be Blank';
+      });
+      return;
+    }
+
+    // Ask firestore if this username eists
+    var db = FirebaseFirestore.instance;
+    db.collection("userdata").where("username", isEqualTo: username).get().then(
+      (querySnapshot) {
+        print("Successfully completed");
+        if (querySnapshot.docs.isEmpty) {
+          print("Username does not exist");
+          setState(() {
+            _userNameError = 'Could Not Find User';
+          });
+        } else {
+          setState(() {
+            _foundUserText = "Successfully Added " + username;
+            _foundUser = true;
+            _userNameError = null;
+          });
+
+          print("Found Username");
+          for (var docSnapshot in querySnapshot.docs) {
+            print('${docSnapshot.id} => ${docSnapshot.data()}');
+          }
+        }
+      },
+      onError: (e) => print("Error completing: $e"),
+    );
   }
 
   @override
@@ -28,20 +79,27 @@ class _AddFriendState extends State<AddFriend> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              if (_usernameError != null)
+              if (_foundUser)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text(
-                    _usernameError!,
+                    _foundUserText!,
+                    style: const TextStyle(color: Colors.green, fontSize: 16),
+                  ),
+                ),
+              if (_userNameError != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    _userNameError!,
                     style: const TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),
               TextField(
-                controller: _usernameController,
-                onChanged: (_) => {},
+                controller: _userNameController,
                 style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
-                  labelText: 'Email',
+                  labelText: 'Username',
                   enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey),
                   ),
@@ -49,8 +107,8 @@ class _AddFriendState extends State<AddFriend> {
                     borderSide: BorderSide(color: Colors.blue),
                   ),
                   prefixIcon: const Icon(Icons.person), // left icon
-                  suffixIcon: (_usernameError == null &&
-                          _usernameController.text.isNotEmpty)
+                  suffixIcon: (_userNameError == null &&
+                          _userNameController.text.isNotEmpty)
                       ? const Icon(Icons.check)
                       : null, // right icon
                 ),
@@ -59,7 +117,7 @@ class _AddFriendState extends State<AddFriend> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => _addFriend(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     padding: const EdgeInsets.symmetric(vertical: 20),
@@ -68,7 +126,7 @@ class _AddFriendState extends State<AddFriend> {
                       borderRadius: BorderRadius.circular(7),
                     ),
                   ),
-                  child: const Text('Login',
+                  child: const Text('Search!',
                       style: TextStyle(color: Colors.white)),
                 ),
               ),

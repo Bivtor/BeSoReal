@@ -3,10 +3,6 @@ import 'package:client/myProfile.dart';
 import 'package:client/addFriend.dart';
 
 void doPageSwitch(context, newRoute) {
-  print("new route name: " + newRoute.runtimeType.toString());
-  print("old route name: ");
-  print(ModalRoute.of(context)?.settings.name);
-
   if (ModalRoute.of(context)?.settings.name ==
       newRoute.runtimeType.toString()) {
     // The current route is the same as the new route, so do nothing

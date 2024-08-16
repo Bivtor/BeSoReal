@@ -1,6 +1,7 @@
 import 'package:client/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -10,6 +11,7 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordController2 = TextEditingController();
@@ -24,6 +26,7 @@ class _SignupState extends State<Signup> {
 
   @override
   void dispose() {
+    _userNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _passwordController2.dispose();
@@ -36,11 +39,11 @@ class _SignupState extends State<Signup> {
       return;
     }
 
+    String name = _userNameController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    // register account with firebase
-
+    // Register account with Firebase Auth
     FirebaseAuth.instance
         .createUserWithEmailAndPassword(
       email: email,
@@ -49,7 +52,16 @@ class _SignupState extends State<Signup> {
         .then((UserCredential userCredential) {
       //print('User created: ${userCredential.user!.email}');
 
-      // show toast
+      // Create firestore entry with credentials
+      var db = FirebaseFirestore.instance;
+
+      // Create a new user with a first and last name
+      final data = {"username": name, 'email': email};
+
+      // Add a new document user uid as ID
+      db.collection("userdata").doc(userCredential.user!.uid).set(data);
+
+      // Show toast
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Signup successful'),
@@ -57,9 +69,17 @@ class _SignupState extends State<Signup> {
         ),
       );
 
+      // TODO Catch?
+      //       if (e.code == 'weak-password') {
+      //   print('The password provided is too weak.');
+      // } else if (e.code == 'email-already-in-use') {
+      //   print('The account already exists for that email.');
+      // }
+
       // go to login page
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const Login()));
+      // go to login page
     }).catchError((error) {
       setState(() {
         switch (error.code) {
@@ -78,8 +98,6 @@ class _SignupState extends State<Signup> {
         }
       });
     });
-
-    // TODO register account with server
   }
 
   void _login() {
@@ -167,6 +185,28 @@ class _SignupState extends State<Signup> {
                     style: const TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),
+
+              // Name Field
+              TextField(
+                controller: _userNameController,
+                style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                  enabledBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  prefixIcon:
+                      const Icon(Icons.account_circle_outlined), // left icon
+                  suffixIcon: (_userNameController.text.isNotEmpty)
+                      ? const Icon(Icons.check)
+                      : null, // right icon
+                ),
+              ),
+
+              // Email Field
               TextField(
                 controller: _emailController,
                 onChanged: (_) => _validateEmail(),
@@ -195,6 +235,8 @@ class _SignupState extends State<Signup> {
                     style: const TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),
+
+              // Password Field
               TextField(
                 controller: _passwordController,
                 onChanged: (_) => _validatePassword(),

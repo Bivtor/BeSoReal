@@ -21,8 +21,7 @@ class _MyProfileState extends State<MyProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: Header(context),
         backgroundColor: Colors.black,
         body: Center(
@@ -33,7 +32,7 @@ class _MyProfileState extends State<MyProfile> {
               children: [
                 const CircleAvatar(
                   radius: 75.0,
-                  backgroundImage: AssetImage('avatar.png'),
+                  backgroundImage: AssetImage('assets/avatar.png'),
                 ),
                 // My Username
                 // TODO add data fetching
@@ -65,8 +64,7 @@ class _MyProfileState extends State<MyProfile> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
 

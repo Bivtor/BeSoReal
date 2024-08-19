@@ -40,18 +40,32 @@ AppBar Header(context) {
       ),
     ),
     centerTitle: true,
-    leading: IconButton(
-      icon: const Icon(Icons.people, color: Colors.white),
-      onPressed: () {
-        // Navigate to Add Friends page
-        doPageSwitch(context, AddFriend());
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => const AddFriend()),
-        // );
-      },
-    ),
-    actions: [
+
+    // no buttons on login / signup pages
+    leading: ModalRoute.of(context)?.settings.name == 'Login' || ModalRoute.of(context)?.settings.name == 'Signup'  || ModalRoute.of(context)?.settings.name == '/' 
+    ? null 
+
+    // add friend button on Feed page
+    : ModalRoute.of(context)?.settings.name == 'Feed' 
+        ? IconButton(
+            icon: const Icon(Icons.people, color: Colors.white),
+            onPressed: () {
+              // Navigate to Add Friends page
+              doPageSwitch(context, AddFriend());
+            },
+          ) 
+
+    // back button on all other pages
+        : IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              // Back to previous page
+              Navigator.pop(context);
+            },
+          ),
+
+    // show the calendar and profile icons only on the Feed page
+    actions: ModalRoute.of(context)?.settings.name == 'Feed' ? [
       IconButton(
         icon: const Icon(Icons.calendar_month, color: Colors.white),
         onPressed: () {
@@ -68,6 +82,8 @@ AppBar Header(context) {
           );
         },
       ),
-    ],
+    ] : null,
+
+
   );
 }

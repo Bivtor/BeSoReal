@@ -223,7 +223,7 @@ class _PostState extends State<Post> {
                         onPressed: () {
                           // go to comments page
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const Comments()));
+                              builder: (context) => const Comments(), settings: RouteSettings(name: Comments().runtimeType.toString())));
                         },
                       ),
                     ],
@@ -237,7 +237,7 @@ class _PostState extends State<Post> {
             Row(
               children: [
                 const CircleAvatar(
-                  backgroundImage: AssetImage('avatar.png'),
+                  backgroundImage: AssetImage('assets/avatar.png'),
                   radius: 20.0,
                 ),
                 const SizedBox(width: 8.0),

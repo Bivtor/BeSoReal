@@ -1,4 +1,5 @@
 import 'package:client/login.dart';
+import 'package:client/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -78,7 +79,7 @@ class _SignupState extends State<Signup> {
 
       // go to login page
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const Login()));
+          context, MaterialPageRoute(builder: (context) => const Login(), settings: RouteSettings(name: Login().runtimeType.toString())));
       // go to login page
     }).catchError((error) {
       setState(() {
@@ -102,7 +103,7 @@ class _SignupState extends State<Signup> {
 
   void _login() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Login()));
+        context, MaterialPageRoute(builder: (context) => const Login(), settings: RouteSettings(name: Login().runtimeType.toString())));
   }
 
   void _validateEmail() {
@@ -162,6 +163,7 @@ class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: Header(context),
       backgroundColor: Colors.black,
       body: Center(
         child: Padding(

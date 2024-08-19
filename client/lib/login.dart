@@ -1,5 +1,6 @@
 import 'package:client/feed.dart';
 import 'package:client/signup.dart';
+import 'package:client/widgets/header.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -87,7 +88,7 @@ class _LoginState extends State<Login> {
         // Navigate to Feed page
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const Feed()),
+          MaterialPageRoute(builder: (context) => const Feed(), settings: RouteSettings(name: Feed().runtimeType.toString())),
         );
       } else {
         // Handle the case where user is null
@@ -106,7 +107,7 @@ class _LoginState extends State<Login> {
 
   void _signup() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Signup()));
+        context, MaterialPageRoute(builder: (context) => const Signup(), settings: RouteSettings(name: Signup().runtimeType.toString())));
   }
 
   void _validateEmail() {
@@ -144,6 +145,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: Header(context),
       backgroundColor: Colors.black,
       body: Center(
         child: Padding(

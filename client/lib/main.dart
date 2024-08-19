@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:client/addFriend.dart';
 import 'package:client/login.dart';
 import 'package:client/myProfile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -33,7 +34,7 @@ void main() async {
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         navigatorKey.currentState?.pushReplacement(
-          MaterialPageRoute(builder: (context) => const Login()),
+          MaterialPageRoute(builder: (context) => const Login(), settings: RouteSettings(name: Login().runtimeType.toString())),
         );
       });
     } else {
@@ -42,7 +43,7 @@ void main() async {
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         navigatorKey.currentState?.pushReplacement(
-          MaterialPageRoute(builder: (context) => const Feed()),
+          MaterialPageRoute(builder: (context) => const Feed(), settings: RouteSettings(name: Feed().runtimeType.toString())),
         );
       });
     }

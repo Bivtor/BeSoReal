@@ -1,3 +1,4 @@
+import 'package:client/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:client/myProfile.dart';
 import 'package:client/addFriend.dart';
@@ -10,7 +11,7 @@ void doPageSwitch(context, newRoute) {
     // Navigate to the new route
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => newRoute),
+      MaterialPageRoute(builder: (context) => newRoute, settings: RouteSettings(name: newRoute.runtimeType.toString())),
     );
   }
 }
@@ -76,10 +77,15 @@ AppBar Header(context) {
       IconButton(
         icon: const Icon(Icons.person, color: Colors.white),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const MyProfile()),
-          );
+          doPageSwitch(context, MyProfile());
+        },
+      ),
+    ] : ModalRoute.of(context)?.settings.name == 'MyProfile' ? 
+    [
+      IconButton(
+        icon: const Icon(Icons.settings, color: Colors.white),
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const Settings(), settings: RouteSettings(name: Settings().runtimeType.toString())));
         },
       ),
     ] : null,

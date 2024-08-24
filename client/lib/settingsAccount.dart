@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,31 @@ class AccountSettings extends StatefulWidget {
 class _AccountSettingsState extends State<AccountSettings> {
   final _displayNameController = TextEditingController();
   final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+
+  String username = '';
+  String displayName = '';
+  String email = '';
+  String photoURL = '';
+
+  // Get the current user's display name and email
+  @override
+  void initState() {
+
+    FirebaseFirestore.instance.collection('userdata').doc(FirebaseAuth.instance.currentUser?.uid).get().then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        setState(() {
+          username = documentSnapshot.get('username');
+        });
+      }
+    });
+
+    displayName = FirebaseAuth.instance.currentUser?.displayName ?? '';
+    email = FirebaseAuth.instance.currentUser?.email ?? '';
+    photoURL = FirebaseAuth.instance.currentUser?.photoURL ?? '';
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +48,7 @@ class _AccountSettingsState extends State<AccountSettings> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // Profile Picture
             Center(
@@ -60,7 +86,7 @@ class _AccountSettingsState extends State<AccountSettings> {
               controller: _displayNameController,
               labelText: 'Display Name',
               hintText: 'Enter your display name',
-              defaultValue: FirebaseAuth.instance.currentUser?.displayName ?? '',
+              defaultValue: displayName,
             ),
             SizedBox(height: 16),
 
@@ -69,7 +95,16 @@ class _AccountSettingsState extends State<AccountSettings> {
               controller: _usernameController,
               labelText: 'Username',
               hintText: 'Enter your username',
-              defaultValue: FirebaseAuth.instance.currentUser?.email ?? '',
+              defaultValue: username,
+            ),
+            SizedBox(height: 24),
+
+            // Email Text Field
+            _buildTextField(
+              controller: _emailController,
+              labelText: 'Email',
+              editable: false,
+              defaultValue: email,
             ),
             SizedBox(height: 24),
 
@@ -81,7 +116,10 @@ class _AccountSettingsState extends State<AccountSettings> {
 
                     // firebase save
                     FirebaseAuth.instance.currentUser?.updateDisplayName(_displayNameController.text);
-                    FirebaseAuth.instance.currentUser?.updateEmail(_usernameController.text);
+                    FirebaseFirestore.instance.collection('userdata').doc(FirebaseAuth.instance.currentUser?.uid).update({
+                      'username': _usernameController.text,
+                    });
+                    //FirebaseAuth.instance.currentUser?.updateEmail(_usernameController.text);
 
                     // toast message
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -114,11 +152,13 @@ class _AccountSettingsState extends State<AccountSettings> {
   Widget _buildTextField({
     required TextEditingController controller,
     required String labelText,
-    required String hintText,
+    String hintText = '',
+    bool editable = true,
     String defaultValue = ''
   }) {
     controller.text = defaultValue;
     return TextField(
+      enabled: editable,
       controller: controller,
       style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
@@ -127,7 +167,7 @@ class _AccountSettingsState extends State<AccountSettings> {
         hintText: hintText,
         hintStyle: TextStyle(color: Colors.white54),
         filled: true,
-        fillColor: Colors.grey[800],
+        fillColor: editable ? Colors.grey[800] : Colors.grey[900],
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.0),
           borderSide: BorderSide.none,

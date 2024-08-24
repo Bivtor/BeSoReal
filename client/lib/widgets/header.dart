@@ -75,9 +75,9 @@ AppBar Header(context) {
         },
       ),
       IconButton(
-        icon: const Icon(Icons.person, color: Colors.white),
+        icon: const Icon(Icons.settings, color: Colors.white),
         onPressed: () {
-          doPageSwitch(context, MyProfile());
+          doPageSwitch(context, Settings());
         },
       ),
     ] : ModalRoute.of(context)?.settings.name == 'MyProfile' ? 

@@ -1,5 +1,7 @@
 import 'package:client/login.dart';
 import 'package:client/settingsAccount.dart';
+import 'package:client/settingsNotifications.dart';
+import 'package:client/settingsOther.dart';
 import 'package:client/widgets/header.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +50,7 @@ Future<void> _signOut() async {
                     title: 'Notifications',
                     icon: Icons.notifications,
                     onTap: () {
-                      
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationSettings(), settings: RouteSettings(name: 'NotificationSettings')));
                     },
                   ),
                   _SettingsItem(
@@ -64,7 +66,7 @@ Future<void> _signOut() async {
                     title: 'Other',
                     icon: Icons.more_horiz,
                     onTap: () {
-                      
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => OtherSettings(), settings: RouteSettings(name: 'OtherSettings')));
                     },
                   ),
                 ],

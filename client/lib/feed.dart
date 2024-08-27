@@ -4,6 +4,22 @@ import 'package:client/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:client/widgets/header.dart';
+import 'package:amplify_core/amplify_core.dart';
+import 'package:path_provider/path_provider.dart';
+
+Future<void> downloadFile() async {
+  final documentsDir = await getApplicationDocumentsDirectory();
+  final filepath = '${documentsDir.path}/example.txt';
+  try {
+    final result = await Amplify.Storage.downloadFile(
+      path: const StoragePath.fromString('public/example.txt'),
+      localFile: AWSFile.fromPath(filepath),
+    ).result;
+    safePrint('Downloaded file is located at: ${result.localFile.path}');
+  } on StorageException catch (e) {
+    safePrint(e.message);
+  }
+}
 
 class Feed extends StatefulWidget {
   const Feed({super.key});
@@ -18,7 +34,10 @@ class _FeedState extends State<Feed> {
 
   Future<void> _signOut() async {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Login(), settings: RouteSettings(name: Login().runtimeType.toString())));
+        context,
+        MaterialPageRoute(
+            builder: (context) => const Login(),
+            settings: RouteSettings(name: Login().runtimeType.toString())));
     await FirebaseAuth.instance.signOut();
   }
 

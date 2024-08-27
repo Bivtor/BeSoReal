@@ -83,7 +83,7 @@ class _AddFriendState extends State<AddFriend> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text(
-                    _foundUserText!,
+                    _foundUserText,
                     style: const TextStyle(color: Colors.green, fontSize: 16),
                   ),
                 ),

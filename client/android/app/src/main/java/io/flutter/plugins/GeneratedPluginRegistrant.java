@@ -16,9 +16,24 @@ public final class GeneratedPluginRegistrant {
   private static final String TAG = "GeneratedPluginRegistrant";
   public static void registerWith(@NonNull FlutterEngine flutterEngine) {
     try {
+      flutterEngine.getPlugins().add(new com.amazonaws.amplify.amplify_analytics_pinpoint.AmplifyAnalyticsPinpointPlugin());
+    } catch (Exception e) {
+      Log.e(TAG, "Error registering plugin amplify_analytics_pinpoint, com.amazonaws.amplify.amplify_analytics_pinpoint.AmplifyAnalyticsPinpointPlugin", e);
+    }
+    try {
+      flutterEngine.getPlugins().add(new com.amazonaws.amplify.amplify_auth_cognito.AmplifyAuthCognitoPlugin());
+    } catch (Exception e) {
+      Log.e(TAG, "Error registering plugin amplify_auth_cognito, com.amazonaws.amplify.amplify_auth_cognito.AmplifyAuthCognitoPlugin", e);
+    }
+    try {
       flutterEngine.getPlugins().add(new com.amazonaws.amplify.amplify_db_common.AmplifyDbCommonPlugin());
     } catch (Exception e) {
       Log.e(TAG, "Error registering plugin amplify_db_common, com.amazonaws.amplify.amplify_db_common.AmplifyDbCommonPlugin", e);
+    }
+    try {
+      flutterEngine.getPlugins().add(new com.amazonaws.amplify.amplify_secure_storage.AmplifySecureStoragePlugin());
+    } catch (Exception e) {
+      Log.e(TAG, "Error registering plugin amplify_secure_storage, com.amazonaws.amplify.amplify_secure_storage.AmplifySecureStoragePlugin", e);
     }
     try {
       flutterEngine.getPlugins().add(new io.flutter.plugins.camerax.CameraAndroidCameraxPlugin());
@@ -29,6 +44,11 @@ public final class GeneratedPluginRegistrant {
       flutterEngine.getPlugins().add(new io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestorePlugin());
     } catch (Exception e) {
       Log.e(TAG, "Error registering plugin cloud_firestore, io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestorePlugin", e);
+    }
+    try {
+      flutterEngine.getPlugins().add(new dev.fluttercommunity.plus.device_info.DeviceInfoPlusPlugin());
+    } catch (Exception e) {
+      Log.e(TAG, "Error registering plugin device_info_plus, dev.fluttercommunity.plus.device_info.DeviceInfoPlusPlugin", e);
     }
     try {
       flutterEngine.getPlugins().add(new com.mr.flutter.plugin.filepicker.FilePickerPlugin());
@@ -51,6 +71,11 @@ public final class GeneratedPluginRegistrant {
       Log.e(TAG, "Error registering plugin flutter_plugin_android_lifecycle, io.flutter.plugins.flutter_plugin_android_lifecycle.FlutterAndroidLifecyclePlugin", e);
     }
     try {
+      flutterEngine.getPlugins().add(new dev.fluttercommunity.plus.packageinfo.PackageInfoPlugin());
+    } catch (Exception e) {
+      Log.e(TAG, "Error registering plugin package_info_plus, dev.fluttercommunity.plus.packageinfo.PackageInfoPlugin", e);
+    }
+    try {
       flutterEngine.getPlugins().add(new io.flutter.plugins.pathprovider.PathProviderPlugin());
     } catch (Exception e) {
       Log.e(TAG, "Error registering plugin path_provider_android, io.flutter.plugins.pathprovider.PathProviderPlugin", e);
@@ -64,6 +89,11 @@ public final class GeneratedPluginRegistrant {
       flutterEngine.getPlugins().add(new com.tekartik.sqflite.SqflitePlugin());
     } catch (Exception e) {
       Log.e(TAG, "Error registering plugin sqflite, com.tekartik.sqflite.SqflitePlugin", e);
+    }
+    try {
+      flutterEngine.getPlugins().add(new io.flutter.plugins.urllauncher.UrlLauncherPlugin());
+    } catch (Exception e) {
+      Log.e(TAG, "Error registering plugin url_launcher_android, io.flutter.plugins.urllauncher.UrlLauncherPlugin", e);
     }
   }
 }

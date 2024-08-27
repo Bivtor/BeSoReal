@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:client/comments.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:client/createPost.dart';
 
 class Post extends StatefulWidget {
   final Function(bool) updatePostedToday;
@@ -77,7 +78,9 @@ class _PostState extends State<Post> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
                 child: Image.asset(
-                  focusSelfie ? 'assets/post_image2.png' : 'assets/post_image.png',
+                  focusSelfie
+                      ? 'assets/post_image2.png'
+                      : 'assets/post_image.png',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -140,8 +143,15 @@ class _PostState extends State<Post> {
                             horizontal: 100.0, vertical: 25.0),
                       ),
                       onPressed: () {
-                        // update posted today
-                        widget.updatePostedToday(true);
+                        // GOTO Create post for today page
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const CreatePost(),
+                            settings: RouteSettings(
+                                name: CreatePost().runtimeType.toString())));
+
+                        // Update posted today
+
+                        // widget.updatePostedToday(true);
                       },
                       child: const Text('Post now',
                           style: TextStyle(
@@ -223,7 +233,9 @@ class _PostState extends State<Post> {
                         onPressed: () {
                           // go to comments page
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const Comments(), settings: RouteSettings(name: Comments().runtimeType.toString())));
+                              builder: (context) => const Comments(),
+                              settings: RouteSettings(
+                                  name: Comments().runtimeType.toString())));
                         },
                       ),
                     ],

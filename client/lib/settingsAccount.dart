@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:client/widgets/header.dart';
+import 'package:client/api.dart';
 
 class AccountSettings extends StatefulWidget {
   @override
@@ -29,11 +30,11 @@ class _AccountSettingsState extends State<AccountSettings> {
       if (documentSnapshot.exists) {
         setState(() {
           username = documentSnapshot.get('username');
+          displayName = documentSnapshot.get('displayName');
         });
       }
     });
 
-    displayName = FirebaseAuth.instance.currentUser?.displayName ?? '';
     email = FirebaseAuth.instance.currentUser?.email ?? '';
     photoURL = FirebaseAuth.instance.currentUser?.photoURL ?? '';
 
@@ -112,21 +113,34 @@ class _AccountSettingsState extends State<AccountSettings> {
             SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+
+                    if (FirebaseAuth.instance.currentUser?.uid == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('User not logged in'),
+                        ),
+                      );
+                      return;
+                    }
 
                     // firebase save
-                    FirebaseAuth.instance.currentUser?.updateDisplayName(_displayNameController.text);
-                    FirebaseFirestore.instance.collection('userdata').doc(FirebaseAuth.instance.currentUser?.uid).update({
-                      'username': _usernameController.text,
-                    });
-                    //FirebaseAuth.instance.currentUser?.updateEmail(_usernameController.text);
+                    String? error = await updateAccount(_usernameController.text, _displayNameController.text);
 
-                    // toast message
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Account settings saved'),
-                      ),
-                    );
+                    if (error == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Account settings saved'),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Color.fromARGB(255, 128, 20, 20),
+                          content: Text(error),
+                        ),
+                      );
+                    }
 
                   },
                   style: ElevatedButton.styleFrom(

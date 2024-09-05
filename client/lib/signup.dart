@@ -57,7 +57,14 @@ class _SignupState extends State<Signup> {
       var db = FirebaseFirestore.instance;
 
       // Create a new user with a first and last name
-      final data = {"username": name, 'email': email};
+      final data = {
+        "displayName": name,
+        "username": name,
+        "username_lowercase": name.toLowerCase(),
+        'email': email,
+        'friends': [], // will hold an array of user ids
+        'friend_requests': [] // friends requests that have been sent to this user
+      };
 
       // Add a new document user uid as ID
       db.collection("userdata").doc(userCredential.user!.uid).set(data);

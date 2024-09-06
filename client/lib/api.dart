@@ -41,6 +41,15 @@ Future<Map<String, dynamic>> genericRequest(
           'Authorization': 'Bearer $userToken',
         },
       );
+    } else if (method == 'PUT') {
+      response = await http.put(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $userToken',
+        },
+        body: jsonEncode(body),
+      );
     } else {
       return { 'error': 'Unsupported method: $method' };
     }
@@ -106,5 +115,13 @@ Future<Map<String, dynamic>> getFriends() async {
   return await genericRequest(
     url: "https://fovp451r9d.execute-api.us-west-1.amazonaws.com/main/friends",
     method: 'GET'
+  );
+}
+
+Future<Map<String, dynamic>> uploadImage() async {
+  return await genericRequest(
+    url: "https://fovp451r9d.execute-api.us-west-1.amazonaws.com/main/imageUpload",
+    method: 'PUT',
+    body: {"image": "base64 image string goes here"}
   );
 }

@@ -73,12 +73,12 @@ class _CreatePostState extends State<CreatePost> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 "Create a post",
                 style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
               ),
               Padding(
-                  padding: EdgeInsets.all(1),
+                  padding: const EdgeInsets.all(1),
                   child: FutureBuilder(
                       future: _initializeControllerFuture,
                       builder: (context, snapshot) {
@@ -92,13 +92,13 @@ class _CreatePostState extends State<CreatePost> {
                                 padding: const EdgeInsets.all(16.0),
                                 child: ElevatedButton(
                                   onPressed: _captureImage,
-                                  child: Text('Capture Image'),
+                                  child: const Text('Capture Image'),
                                 ),
                               ),
                             ],
                           );
                         } else {
-                          return Center(child: CircularProgressIndicator());
+                          return const Center(child: CircularProgressIndicator());
                         }
                       }))
             ],

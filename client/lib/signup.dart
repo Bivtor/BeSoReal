@@ -61,7 +61,6 @@ class _SignupState extends State<Signup> {
         "displayName": name,
         "username": name,
         "username_lowercase": name.toLowerCase(),
-        'email': email,
         'friends': [], // will hold an array of user ids
         'friend_requests': [] // friends requests that have been sent to this user
       };
@@ -86,7 +85,7 @@ class _SignupState extends State<Signup> {
 
       // go to login page
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const Login(), settings: RouteSettings(name: Login().runtimeType.toString())));
+          context, MaterialPageRoute(builder: (context) => const Login(), settings: RouteSettings(name: const Login().runtimeType.toString())));
       // go to login page
     }).catchError((error) {
       setState(() {
@@ -110,7 +109,7 @@ class _SignupState extends State<Signup> {
 
   void _login() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Login(), settings: RouteSettings(name: Login().runtimeType.toString())));
+        context, MaterialPageRoute(builder: (context) => const Login(), settings: RouteSettings(name: const Login().runtimeType.toString())));
   }
 
   void _validateEmail() {

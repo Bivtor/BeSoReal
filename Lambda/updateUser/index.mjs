@@ -1,58 +1,20 @@
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-const admin = require('firebase-admin');
-const serviceAccount = require('./serviceAccountKey.json');
+import { admin, db, verifyToken } from '/opt/utils.mjs';
 
-// Initialize Firebase Admin
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-});
-
-const db = admin.firestore();
+// POST /updateUser
 
 export async function handler(event) {
-    // Parse the incoming event (from body and headers)
-    const body = JSON.parse(event.body || '{}');
-    const authHeader = event.headers.Authorization || event.headers.authorization;
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return {
-            statusCode: 401,
-            body: JSON.stringify({ error: 'Unauthorized request: Authorization header missing or malformed' }),
-        };
-    }
-
-    const idToken = authHeader.split(' ')[1]; // Extract the token
-
     try {
-        // Verify the Firebase ID token
-        const decodedToken = await admin.auth().verifyIdToken(idToken);
-        const userID = decodedToken.uid; // Extract userID from the token
+        const { body, decodedToken } = await verifyToken(event);
+        const userID = decodedToken.uid;
 
-        console.log('Authenticated user ID:', userID);
-
-        // Get the username from the request body
         const { username, displayName } = body;
 
-        if (!username) {
-            return {
-                statusCode: 400,
-                body: JSON.stringify({ error: 'missing username' }),
-            };
-        }
-
-        if (!displayName) {
-            return {
-                statusCode: 400,
-                body: JSON.stringify({ error: 'missing displayName' }),
-            };
-        }
-
-        // check if the username is already taken
+        // Check if the username is already taken
         const usernameQuerySnapshot = await db.collection('userdata')
             .where('username_lowercase', '==', username.toLowerCase())
             .where('__name__', '!=', userID) // Exclude the current user
             .get();
+
         if (!usernameQuerySnapshot.empty) {
             return {
                 statusCode: 409, // Conflict
@@ -69,15 +31,16 @@ export async function handler(event) {
         };
 
         await docRef.set(dataToUpdate, { merge: true });
+
         return {
             statusCode: 200,
             body: JSON.stringify({ message: 'Document updated successfully!' }),
         };
     } catch (error) {
-        console.error('Error verifying ID token or updating document:', error);
+        console.error('Error processing request:', error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: 'Error updating document' }),
+            body: JSON.stringify({ error: error.message || 'Error updating document' }),
         };
     }
 }

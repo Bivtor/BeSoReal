@@ -28,9 +28,9 @@ AppBar Header(context) {
           (route) => route.isFirst,
         );
       },
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: const DefaultTextStyle(
+      child: const Padding(
+        padding: EdgeInsets.all(20.0),
+        child: DefaultTextStyle(
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -52,7 +52,7 @@ AppBar Header(context) {
             icon: const Icon(Icons.people, color: Colors.white),
             onPressed: () {
               // Navigate to Add Friends page
-              doPageSwitch(context, AddFriend());
+              doPageSwitch(context, const AddFriend());
             },
           ) 
 
@@ -77,7 +77,7 @@ AppBar Header(context) {
       IconButton(
         icon: const Icon(Icons.settings, color: Colors.white),
         onPressed: () {
-          doPageSwitch(context, Settings());
+          doPageSwitch(context, const Settings());
         },
       ),
     ] : ModalRoute.of(context)?.settings.name == 'MyProfile' ? 
@@ -85,7 +85,7 @@ AppBar Header(context) {
       IconButton(
         icon: const Icon(Icons.settings, color: Colors.white),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const Settings(), settings: RouteSettings(name: Settings().runtimeType.toString())));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const Settings(), settings: RouteSettings(name: const Settings().runtimeType.toString())));
         },
       ),
     ] : null,

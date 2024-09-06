@@ -147,7 +147,7 @@ class _PostState extends State<Post> {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const CreatePost(),
                             settings: RouteSettings(
-                                name: CreatePost().runtimeType.toString())));
+                                name: const CreatePost().runtimeType.toString())));
 
                         // Update posted today
 
@@ -235,7 +235,7 @@ class _PostState extends State<Post> {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const Comments(),
                               settings: RouteSettings(
-                                  name: Comments().runtimeType.toString())));
+                                  name: const Comments().runtimeType.toString())));
                         },
                       ),
                     ],

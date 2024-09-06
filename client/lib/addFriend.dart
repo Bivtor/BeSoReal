@@ -1,6 +1,6 @@
+import 'package:client/api.dart';
 import 'package:flutter/material.dart';
 import 'package:client/widgets/header.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddFriend extends StatefulWidget {
   const AddFriend({super.key});
@@ -34,38 +34,29 @@ class _AddFriendState extends State<AddFriend> {
     // Get username
     String username = _userNameController.text.trim();
 
-    if (username.length < 1) {
+    if (username.isEmpty) {
       setState(() {
         _userNameError = 'Field Cannot be Blank';
       });
       return;
     }
 
-    // Ask firestore if this username eists
-    var db = FirebaseFirestore.instance;
-    db.collection("userdata").where("username", isEqualTo: username).get().then(
-      (querySnapshot) {
-        print("Successfully completed");
-        if (querySnapshot.docs.isEmpty) {
-          print("Username does not exist");
-          setState(() {
-            _userNameError = 'Could Not Find User';
-          });
-        } else {
-          setState(() {
-            _foundUserText = "Successfully Added " + username;
-            _foundUser = true;
-            _userNameError = null;
-          });
+    Map<String, dynamic> result = await addFriend(username);
 
-          print("Found Username");
-          for (var docSnapshot in querySnapshot.docs) {
-            print('${docSnapshot.id} => ${docSnapshot.data()}');
-          }
-        }
-      },
-      onError: (e) => print("Error completing: $e"),
-    );
+    // if we left this page, return
+    if (!mounted) return;
+
+    if (result['error'] != null) {
+      setState(() {
+        _userNameError = result['error'];
+      });
+    } else {
+      setState(() {
+        _foundUserText = "Successfully Added $username";
+        _foundUser = true;
+        _userNameError = null;
+      });
+    }
   }
 
   @override

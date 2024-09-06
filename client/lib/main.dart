@@ -48,7 +48,7 @@ Future<void> main() async {
         navigatorKey.currentState?.pushReplacement(
           MaterialPageRoute(
               builder: (context) => const Login(),
-              settings: RouteSettings(name: Login().runtimeType.toString())),
+              settings: RouteSettings(name: const Login().runtimeType.toString())),
         );
       });
     } else {
@@ -59,7 +59,7 @@ Future<void> main() async {
         navigatorKey.currentState?.pushReplacement(
           MaterialPageRoute(
               builder: (context) => const Feed(),
-              settings: RouteSettings(name: Feed().runtimeType.toString())),
+              settings: RouteSettings(name: const Feed().runtimeType.toString())),
         );
       });
     }
@@ -78,8 +78,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       routes: {
-        '/addFriend': (context) => AddFriend(),
-        '/myprofile': (context) => MyProfile(),
+        '/addFriend': (context) => const AddFriend(),
+        '/myprofile': (context) => const MyProfile(),
       },
       navigatorKey: navigatorKey,
 

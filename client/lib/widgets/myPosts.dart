@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Wrap AllMyPosts(context) {
-  return Wrap(
+  return const Wrap(
     spacing: 10.0, // gap between adjacent chips
     runSpacing: 10.0, // gap between lines
     children: [

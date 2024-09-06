@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 // TODO REMOVE
 // Login button autofills victor@victor.victor
-const DEBUG_MODE = true;
+const DEBUG_MODE = false;
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -50,7 +50,7 @@ class _LoginState extends State<Login> {
       print('Validation errors present.');
       return;
     }
-    if (email.length == 0 || password.length == 0) {
+    if (email.isEmpty || password.isEmpty) {
       setState(() {
         _emailError = 'Blank email or password';
       });
@@ -83,12 +83,12 @@ class _LoginState extends State<Login> {
         final userdata = db.collection("userdata");
 
         // Get user uid
-        final firestore_user = userdata.doc(user.uid);
-        print(firestore_user);
+        final firestoreUser = userdata.doc(user.uid);
+        print(firestoreUser);
         // Navigate to Feed page
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const Feed(), settings: RouteSettings(name: Feed().runtimeType.toString())),
+          MaterialPageRoute(builder: (context) => const Feed(), settings: RouteSettings(name: const Feed().runtimeType.toString())),
         );
       } else {
         // Handle the case where user is null
@@ -107,7 +107,7 @@ class _LoginState extends State<Login> {
 
   void _signup() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Signup(), settings: RouteSettings(name: Signup().runtimeType.toString())));
+        context, MaterialPageRoute(builder: (context) => const Signup(), settings: RouteSettings(name: const Signup().runtimeType.toString())));
   }
 
   void _validateEmail() {

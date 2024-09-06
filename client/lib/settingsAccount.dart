@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +6,8 @@ import 'package:client/widgets/header.dart';
 import 'package:client/api.dart';
 
 class AccountSettings extends StatefulWidget {
+  const AccountSettings({super.key});
+
   @override
   _AccountSettingsState createState() => _AccountSettingsState();
 }
@@ -25,20 +25,24 @@ class _AccountSettingsState extends State<AccountSettings> {
   // Get the current user's display name and email
   @override
   void initState() {
-
-    FirebaseFirestore.instance.collection('userdata').doc(FirebaseAuth.instance.currentUser?.uid).get().then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        setState(() {
-          username = documentSnapshot.get('username');
-          displayName = documentSnapshot.get('displayName');
-        });
-      }
-    });
-
-    email = FirebaseAuth.instance.currentUser?.email ?? '';
+    fetchData();
+    //email = FirebaseAuth.instance.currentUser?.email ?? '';
     photoURL = FirebaseAuth.instance.currentUser?.photoURL ?? '';
 
     super.initState();
+  }
+
+  void fetchData() async {
+    Map<String, dynamic> result = await getUserInfo();
+
+    if (!mounted) return;
+    if (result['error'] != null) return;
+
+    setState(() {
+      username = result['username'];
+      displayName = result['displayName'];
+      email = result['email'];
+    });
   }
 
   @override
@@ -57,14 +61,14 @@ class _AccountSettingsState extends State<AccountSettings> {
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: AssetImage('assets/avatar.png'),
+                    backgroundImage: const AssetImage('assets/avatar.png'),
                     backgroundColor: Colors.grey[800],
                   ),
                   Positioned(
                     bottom: 0,
                     right: 0,
                     child: IconButton(
-                      icon: Icon(Icons.camera_alt, color: Colors.white),
+                      icon: const Icon(Icons.camera_alt, color: Colors.white),
                       onPressed: () async {
 
                         FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -80,7 +84,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Display Name Text Field
             _buildTextField(
@@ -89,7 +93,7 @@ class _AccountSettingsState extends State<AccountSettings> {
               hintText: 'Enter your display name',
               defaultValue: displayName,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Username Text Field
             _buildTextField(
@@ -98,7 +102,7 @@ class _AccountSettingsState extends State<AccountSettings> {
               hintText: 'Enter your username',
               defaultValue: username,
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // Email Text Field
             _buildTextField(
@@ -107,7 +111,7 @@ class _AccountSettingsState extends State<AccountSettings> {
               editable: false,
               defaultValue: email,
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // Save Button
             SizedBox(
@@ -125,9 +129,9 @@ class _AccountSettingsState extends State<AccountSettings> {
                     }
 
                     // firebase save
-                    String? error = await updateAccount(_usernameController.text, _displayNameController.text);
+                    Map<String, dynamic> result = await updateAccount(_usernameController.text, _displayNameController.text);
 
-                    if (error == null) {
+                    if (result['success'] != null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Account settings saved'),
@@ -136,8 +140,8 @@ class _AccountSettingsState extends State<AccountSettings> {
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          backgroundColor: Color.fromARGB(255, 128, 20, 20),
-                          content: Text(error),
+                          backgroundColor: const Color.fromARGB(255, 128, 20, 20),
+                          content: Text(result['error']),
                         ),
                       );
                     }
@@ -174,19 +178,19 @@ class _AccountSettingsState extends State<AccountSettings> {
     return TextField(
       enabled: editable,
       controller: controller,
-      style: TextStyle(color: Colors.white),
+      style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: TextStyle(color: Colors.white70),
+        labelStyle: const TextStyle(color: Colors.white70),
         hintText: hintText,
-        hintStyle: TextStyle(color: Colors.white54),
+        hintStyle: const TextStyle(color: Colors.white54),
         filled: true,
         fillColor: editable ? Colors.grey[800] : Colors.grey[900],
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.0),
           borderSide: BorderSide.none,
         ),
-        contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+        contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
       ),
     );
   }

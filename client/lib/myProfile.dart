@@ -36,8 +36,8 @@ class _MyProfileState extends State<MyProfile> {
                 ),
                 // My Username
                 // TODO add data fetching
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
+                const Padding(
+                  padding: EdgeInsets.all(20.0),
                   child: Text(
                     'Lebron James',
                     style: TextStyle(

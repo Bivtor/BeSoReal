@@ -37,7 +37,7 @@ class _OtherSettingsState extends State<OtherSettings> {
                       // clear cache
 
                       if (Theme.of(context).platform == TargetPlatform.windows) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Cache clearing is not supported on Windows'),
                           duration: Duration(seconds: 3),
                         ));
@@ -49,7 +49,7 @@ class _OtherSettingsState extends State<OtherSettings> {
                       final cacheDir = await getTemporaryDirectory();
                       if (cacheDir.existsSync()) {
                         cacheDir.deleteSync(recursive: true);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Cache cleared'),
                           duration: Duration(seconds: 3),
                         ));
@@ -57,7 +57,7 @@ class _OtherSettingsState extends State<OtherSettings> {
                       await DefaultCacheManager().emptyCache();
                     } catch (e) {
                       print(e);
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('An error occurred while clearing the cache'),
                         duration: Duration(seconds: 3),
                       ));
@@ -68,7 +68,7 @@ class _OtherSettingsState extends State<OtherSettings> {
                 ],
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               _SettingsGroup(
                 context,
@@ -105,7 +105,7 @@ class _OtherSettingsState extends State<OtherSettings> {
           padding: const EdgeInsets.only(bottom: 8.0, left: 4.0),
           child: Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white70,
               fontSize: 18,
               fontWeight: FontWeight.bold,

@@ -37,7 +37,7 @@ class _FeedState extends State<Feed> {
         context,
         MaterialPageRoute(
             builder: (context) => const Login(),
-            settings: RouteSettings(name: Login().runtimeType.toString())));
+            settings: RouteSettings(name: const Login().runtimeType.toString())));
     await FirebaseAuth.instance.signOut();
   }
 

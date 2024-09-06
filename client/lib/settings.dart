@@ -17,7 +17,7 @@ class _SettingsState extends State<Settings> {
 
 Future<void> _signOut() async {
   await FirebaseAuth.instance.signOut();
-  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login(), settings: RouteSettings(name: 'Login')));
+  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Login(), settings: const RouteSettings(name: 'Login')));
 }
 
 @override
@@ -42,7 +42,7 @@ Future<void> _signOut() async {
                     title: 'Account',
                     icon: Icons.person,
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AccountSettings(), settings: RouteSettings(name: 'AccountSettings')));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AccountSettings(), settings: const RouteSettings(name: 'AccountSettings')));
                     },
                   ),
                   _SettingsItem(
@@ -50,7 +50,7 @@ Future<void> _signOut() async {
                     title: 'Notifications',
                     icon: Icons.notifications,
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationSettings(), settings: RouteSettings(name: 'NotificationSettings')));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const NotificationSettings(), settings: const RouteSettings(name: 'NotificationSettings')));
                     },
                   ),
                   _SettingsItem(
@@ -66,13 +66,13 @@ Future<void> _signOut() async {
                     title: 'Other',
                     icon: Icons.more_horiz,
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => OtherSettings(), settings: RouteSettings(name: 'OtherSettings')));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const OtherSettings(), settings: const RouteSettings(name: 'OtherSettings')));
                     },
                   ),
                 ],
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // About group
               _SettingsGroup(
@@ -107,7 +107,7 @@ Future<void> _signOut() async {
                 ],
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               _SettingsGroup(
                 context,
@@ -142,7 +142,7 @@ Future<void> _signOut() async {
           padding: const EdgeInsets.only(bottom: 8.0, left: 4.0),
           child: Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white70,
               fontSize: 18,
               fontWeight: FontWeight.bold,

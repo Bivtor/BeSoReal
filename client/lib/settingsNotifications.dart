@@ -59,7 +59,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _SettingsGroup(
                 title: 'Other',
                 context,
@@ -86,7 +86,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -136,7 +136,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
             padding: const EdgeInsets.only(bottom: 8.0, left: 4.0),
             child: Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white70,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -176,19 +176,17 @@ class _NotificationSettingsState extends State<NotificationSettings> {
       notifications[title] = false;
     }
 
-    if (onTap == null) {
-      onTap = () {
+    onTap ??= () {
         setState(() {
           notifications[title] = !notifications[title]!;
         });
       };
-    }
 
-    ValueChanged<bool> onToggle = (bool value) {
+    onToggle(bool value) {
       setState(() {
         notifications[title] = value;
       });
-    };
+    }
 
     bool isSwitched = notifications[title]!;
 

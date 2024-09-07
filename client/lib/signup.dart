@@ -61,6 +61,7 @@ class _SignupState extends State<Signup> {
         "displayName": name,
         "username": name,
         "username_lowercase": name.toLowerCase(),
+        "photoURL": "",
         'friends': [], // will hold an array of user ids
         'friend_requests': [] // friends requests that have been sent to this user
       };

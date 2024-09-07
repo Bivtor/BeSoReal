@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,9 +27,6 @@ class _AccountSettingsState extends State<AccountSettings> {
   @override
   void initState() {
     fetchData();
-    //email = FirebaseAuth.instance.currentUser?.email ?? '';
-    photoURL = FirebaseAuth.instance.currentUser?.photoURL ?? '';
-
     super.initState();
   }
 
@@ -42,6 +40,7 @@ class _AccountSettingsState extends State<AccountSettings> {
       username = result['username'];
       displayName = result['displayName'];
       email = result['email'];
+      photoURL = result['photoURL'];
     });
   }
 
@@ -61,7 +60,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: const AssetImage('assets/avatar.png'),
+                    backgroundImage: photoURL != '' ? NetworkImage(photoURL) : null,
                     backgroundColor: Colors.grey[800],
                   ),
                   Positioned(
@@ -76,6 +75,18 @@ class _AccountSettingsState extends State<AccountSettings> {
                           File file = File(result.files.single.path!);
                           print(file);
                           // TODO upload to AWS, send new link to Firebase
+
+                          // image to base64
+                          List<int> imageBytes = file.readAsBytesSync();
+                          String img = base64Encode(imageBytes);
+
+                          Map<String, dynamic> uploadResult = await uploadImage(img, 'profile');
+                          
+                          if (uploadResult['success'] != null) {
+                            setState(() {
+                              photoURL = uploadResult['success']['url'];
+                            });
+                          }
                         }
 
                       },

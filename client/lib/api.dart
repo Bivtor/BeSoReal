@@ -118,10 +118,13 @@ Future<Map<String, dynamic>> getFriends() async {
   );
 }
 
-Future<Map<String, dynamic>> uploadImage() async {
+Future<Map<String, dynamic>> uploadImage(String img, String destination) async {
   return await genericRequest(
     url: "https://fovp451r9d.execute-api.us-west-1.amazonaws.com/main/imageUpload",
     method: 'PUT',
-    body: {"image": "base64 image string goes here"}
+    body: {
+      "image": img,
+      "destination": destination,
+    }
   );
 }

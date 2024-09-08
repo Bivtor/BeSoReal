@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 // TODO REMOVE
 // Login button autofills victor@victor.victor
-const DEBUG_MODE = false;
+const DEBUG_MODE = true;
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -88,7 +88,10 @@ class _LoginState extends State<Login> {
         // Navigate to Feed page
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const Feed(), settings: RouteSettings(name: const Feed().runtimeType.toString())),
+          MaterialPageRoute(
+              builder: (context) => const Feed(),
+              settings:
+                  RouteSettings(name: const Feed().runtimeType.toString())),
         );
       } else {
         // Handle the case where user is null
@@ -107,7 +110,11 @@ class _LoginState extends State<Login> {
 
   void _signup() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Signup(), settings: RouteSettings(name: const Signup().runtimeType.toString())));
+        context,
+        MaterialPageRoute(
+            builder: (context) => const Signup(),
+            settings:
+                RouteSettings(name: const Signup().runtimeType.toString())));
   }
 
   void _validateEmail() {

@@ -50,10 +50,9 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     // TODO Freeze screen and do image upload to S3
 
     final _bytes = await image.readAsBytes();
-    final _base64string = await base64Encode(_bytes);
+    final _base64string = base64Encode(_bytes);
 
-    Map<String, dynamic> result =
-        await uploadImage(_base64string, 'mybesorealbucket');
+    Map<String, dynamic> result = await uploadImage(_base64string, 'mybesorealbucket');
 
     print('result3');
     print(result);

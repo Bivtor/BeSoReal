@@ -53,6 +53,7 @@ Future<void> _signOut() async {
                       Navigator.of(context).push(MaterialPageRoute(builder: (context) => const NotificationSettings(), settings: const RouteSettings(name: 'NotificationSettings')));
                     },
                   ),
+                  /*
                   _SettingsItem(
                     context,
                     title: 'Privacy',
@@ -61,6 +62,7 @@ Future<void> _signOut() async {
                       
                     },
                   ),
+                  */
                   _SettingsItem(
                     context,
                     title: 'Other',
@@ -73,7 +75,7 @@ Future<void> _signOut() async {
               ),
 
               const SizedBox(height: 20),
-
+/*
               // About group
               _SettingsGroup(
                 title: 'About',
@@ -108,7 +110,7 @@ Future<void> _signOut() async {
               ),
 
               const SizedBox(height: 20),
-
+*/
               _SettingsGroup(
                 context,
                 items: [

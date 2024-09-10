@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:client/widgets/header.dart';
 import 'package:client/api.dart';
+import 'package:flutter/foundation.dart';
 
 class AccountSettings extends StatefulWidget {
   const AccountSettings({super.key});
@@ -71,22 +72,43 @@ class _AccountSettingsState extends State<AccountSettings> {
                       onPressed: () async {
 
                         FilePickerResult? result = await FilePicker.platform.pickFiles();
-                        if (result != null) {
-                          File file = File(result.files.single.path!);
-                          print(file);
-                          // TODO upload to AWS, send new link to Firebase
+                        if (result == null) return;
 
-                          // image to base64
+                        if (kIsWeb) {
+                          // Web platform: use `bytes`
+
+                          // convert to base64
+                          Uint8List? fileBytes = result.files.first.bytes;
+                          if (fileBytes == null) return;
+                          String img = base64Encode(fileBytes);
+                          
+                          // Upload to AWS
+                          Map<String, dynamic> uploadResult = await uploadImage(img, 'profile');
+                          if (!mounted) return;
+                          if (uploadResult['error'] != null) return;
+
+                          setState(() {
+                            photoURL = uploadResult['photoURL'];
+                          });
+
+                        } else {
+                          // Non-web platforms (Mobile/Desktop): use `path`
+
+                          // convert to base64
+                          String? filePath = result.files.single.path;
+                          if (filePath == null) return;
+                          File file = File(filePath);
                           List<int> imageBytes = file.readAsBytesSync();
                           String img = base64Encode(imageBytes);
 
+                          // Upload to AWS
                           Map<String, dynamic> uploadResult = await uploadImage(img, 'profile');
-                          
-                          if (uploadResult['success'] != null) {
-                            setState(() {
-                              photoURL = uploadResult['success']['url'];
-                            });
-                          }
+                          if (!mounted) return;
+                          if (uploadResult['error'] != null) return;
+
+                          setState(() {
+                            photoURL = uploadResult['photoURL'];
+                          });
                         }
 
                       },

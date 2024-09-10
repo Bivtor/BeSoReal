@@ -57,7 +57,7 @@ Future<Map<String, dynamic>> genericRequest(
     if (response.statusCode == 200) {
       print('Success: ${response.body}');
 
-      if (method == 'GET') return jsonDecode(response.body);
+      if (method == 'GET' || method == 'PUT') return jsonDecode(response.body);
 
       return {
         'success': jsonDecode(response.body),

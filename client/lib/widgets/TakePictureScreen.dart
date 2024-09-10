@@ -49,22 +49,18 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   Future<void> _asyncConvertAndUpload(XFile image) async {
     // TODO Freeze screen and do image upload to S3
 
-    final _bytes = await image.readAsBytes();
-    final _base64string = base64Encode(_bytes);
+    final _bytes = await image.readAsBytes(); // Convert to bytes
+    final _base64string = base64Encode(_bytes); // Convert to base64
 
-    Map<String, dynamic> result = await uploadImage(_base64string, 'mybesorealbucket');
+    Map<String, dynamic> result =
+        await uploadImage(_base64string, 'mybesorealbucket'); // Upload to S3
 
-    print('result3');
-    print(result);
+    // TODO Set photoURL as my firebase photoURL
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Take a picture')),
-      // You must wait until the controller is initialized before displaying the
-      // camera preview. Use a FutureBuilder to display a loading spinner until the
-      // controller has finished initializing.
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
@@ -91,6 +87,15 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             final image = await _controller.takePicture();
             _asyncConvertAndUpload(
                 image); // Convert to bytes and upload to server
+
+            // Wait a few seconds then move back to home page and load content
+            await Future.delayed(Duration(seconds: 2));
+
+            // Go back to Home
+            Navigator.popUntil(
+              context,
+              (route) => route.isFirst,
+            );
 
             if (!context.mounted) return;
           } catch (e) {

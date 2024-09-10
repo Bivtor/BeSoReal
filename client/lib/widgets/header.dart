@@ -11,7 +11,9 @@ void doPageSwitch(context, newRoute) {
     // Navigate to the new route
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => newRoute, settings: RouteSettings(name: newRoute.runtimeType.toString())),
+      MaterialPageRoute(
+          builder: (context) => newRoute,
+          settings: RouteSettings(name: newRoute.runtimeType.toString())),
     );
   }
 }
@@ -43,53 +45,62 @@ AppBar Header(context) {
     centerTitle: true,
 
     // no buttons on login / signup pages
-    leading: ModalRoute.of(context)?.settings.name == 'Login' || ModalRoute.of(context)?.settings.name == 'Signup'  || ModalRoute.of(context)?.settings.name == '/' 
-    ? null 
+    leading: ModalRoute.of(context)?.settings.name == 'Login' ||
+            ModalRoute.of(context)?.settings.name == 'Signup' ||
+            ModalRoute.of(context)?.settings.name == '/'
+        ? null
 
-    // add friend button on Feed page
-    : ModalRoute.of(context)?.settings.name == 'Feed' 
-        ? IconButton(
-            icon: const Icon(Icons.people, color: Colors.white),
-            onPressed: () {
-              // Navigate to Add Friends page
-              doPageSwitch(context, const AddFriend());
-            },
-          ) 
+        // add friend button on Feed page
+        : ModalRoute.of(context)?.settings.name == 'Feed'
+            ? IconButton(
+                icon: const Icon(Icons.people, color: Colors.white),
+                onPressed: () {
+                  // Navigate to Add Friends page
+                  doPageSwitch(context, const AddFriend());
+                },
+              )
 
-    // back button on all other pages
-        : IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              // Back to previous page
-              Navigator.pop(context);
-            },
-          ),
+            // back button on all other pages
+            : IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () {
+                  // Back to previous page
+                  Navigator.pop(context);
+                },
+              ),
 
     // show the calendar and profile icons only on the Feed page
-    actions: ModalRoute.of(context)?.settings.name == 'Feed' ? [
-      IconButton(
-        icon: const Icon(Icons.calendar_month, color: Colors.white),
-        onPressed: () {
-          // Add navigation to the calendar page here
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => const CalendarPage()));
-        },
-      ),
-      IconButton(
-        icon: const Icon(Icons.settings, color: Colors.white),
-        onPressed: () {
-          doPageSwitch(context, const Settings());
-        },
-      ),
-    ] : ModalRoute.of(context)?.settings.name == 'MyProfile' ? 
-    [
-      IconButton(
-        icon: const Icon(Icons.settings, color: Colors.white),
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const Settings(), settings: RouteSettings(name: const Settings().runtimeType.toString())));
-        },
-      ),
-    ] : null,
-
-
+    actions: ModalRoute.of(context)?.settings.name == 'Feed'
+        ? [
+            IconButton(
+              icon: const Icon(Icons.calendar_month, color: Colors.white),
+              onPressed: () {
+                // Add navigation to the calendar page here
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const CalendarPage()));
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.settings, color: Colors.white),
+              onPressed: () {
+                doPageSwitch(context, const Settings());
+              },
+            ),
+          ]
+        : ModalRoute.of(context)?.settings.name == 'MyProfile'
+            ? [
+                IconButton(
+                  icon: const Icon(Icons.settings, color: Colors.white),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Settings(),
+                            settings: RouteSettings(
+                                name:
+                                    const Settings().runtimeType.toString())));
+                  },
+                ),
+              ]
+            : null,
   );
 }

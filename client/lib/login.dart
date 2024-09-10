@@ -144,7 +144,6 @@ class _LoginState extends State<Login> {
         _passwordError = 'Password is required';
         return;
       }
-
       _passwordError = null;
     });
   }

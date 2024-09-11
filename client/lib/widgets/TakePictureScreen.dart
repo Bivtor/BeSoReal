@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:client/api.dart';
 import 'dart:convert';
-import 'dart:typed_data';
 
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
@@ -22,6 +22,7 @@ class TakePictureScreen extends StatefulWidget {
 class TakePictureScreenState extends State<TakePictureScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
+  var showLoadingBar = false;
 
   @override
   void initState() {
@@ -52,60 +53,77 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     final _bytes = await image.readAsBytes(); // Convert to bytes
     final _base64string = base64Encode(_bytes); // Convert to base64
 
-    Map<String, dynamic> result =
-        await uploadImage(_base64string, 'mybesorealbucket'); // Upload to S3
+    // Enable loading animation
+    setState(() {
+      showLoadingBar = true;
+    });
 
-    // TODO Set photoURL as my firebase photoURL
+    // Call S3 upload from api.dart
+    Map<String, dynamic> result = await uploadImage(_base64string, 'photo1'); //
+
+    // TODO Set photoURL as my firebase photoURL ?
+    // TODO Prevent double button clicks
+
+    // Disable loading animation
+    setState(() {
+      showLoadingBar = false;
+    });
+
+    // Go back to Home
+    Navigator.popUntil(
+      context,
+      (route) => route.isFirst,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder<void>(
-        future: _initializeControllerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            // If the Future is complete, display the preview.
-            return CameraPreview(_controller);
-          } else {
-            // Otherwise, display a loading indicator.
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        // Provide an onPressed callback.
-        onPressed: () async {
-          // Take the Picture in a try / catch block. If anything goes wrong,
-          // catch the error.
-          try {
-            // Ensure that the camera is initialized.
-            await _initializeControllerFuture;
+    return Stack(
+      children: [
+        Scaffold(
+          body: FutureBuilder<void>(
+            future: _initializeControllerFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                // If the Future is complete, display the preview.
+                return CameraPreview(_controller);
+              } else {
+                // Otherwise, display a loading indicator.
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+          floatingActionButton: FloatingActionButton(
+            // Provide an onPressed callback.
+            onPressed: () async {
+              // Take the Picture in a try / catch block. If anything goes wrong,
+              // catch the error.
+              try {
+                // Ensure that the camera is initialized.
+                await _initializeControllerFuture;
 
-            // Attempt to take a picture and get the file `image`
-            // where it was saved.
-            final image = await _controller.takePicture();
-            _asyncConvertAndUpload(
-                image); // Convert to bytes and upload to server
+                // Attempt to take a picture and get the file `image`
+                // where it was saved.
+                final image = await _controller.takePicture();
+                _asyncConvertAndUpload(
+                    image); // Convert to bytes and upload to server
 
-            // Wait a few seconds then move back to home page and load content
-            await Future.delayed(Duration(seconds: 2));
-
-            // Go back to Home
-            Navigator.popUntil(
-              context,
-              (route) => route.isFirst,
-            );
-
-            if (!context.mounted) return;
-          } catch (e) {
-            // If an error occurs, log the error to the console.
-            print('caught error: \n');
-            print(e);
-          }
-        },
-        child: const Icon(Icons.camera_alt),
-      ),
+                if (!context.mounted) return;
+              } catch (e) {
+                // If an error occurs, log the error to the console.
+                print(e);
+              }
+            },
+            child: const Icon(Icons.camera_alt),
+          ),
+        ),
+        if (showLoadingBar)
+          Positioned.fill(
+            child: Align(
+                alignment: Alignment.center, // Centers the widget
+                child: CircularProgressIndicator()),
+          ),
+      ],
     );
   }
 }

@@ -8,7 +8,7 @@ Future<Map<String, dynamic>> genericRequest(
     Map<String, dynamic>? body}) async {
   User? user = FirebaseAuth.instance.currentUser;
   if (user == null) {
-    return { 'error': 'User is not logged in' };
+    return {'error': 'User is not logged in'};
   }
   var userToken = await user.getIdToken();
 
@@ -51,7 +51,7 @@ Future<Map<String, dynamic>> genericRequest(
         body: jsonEncode(body),
       );
     } else {
-      return { 'error': 'Unsupported method: $method' };
+      return {'error': 'Unsupported method: $method'};
     }
 
     if (response.statusCode == 200) {
@@ -65,22 +65,22 @@ Future<Map<String, dynamic>> genericRequest(
     } else {
       var errorJson = jsonDecode(response.body);
       print('Failed: ${response.statusCode.toString()} $errorJson');
-      return { 'error': errorJson['error'] };
+      return {'error': errorJson['error']};
     }
   } catch (error) {
     print('Error: $error');
-    return { 'error': error };
+    return {'error': error};
   }
 }
 
 Future<Map<String, dynamic>> getUserInfo() async {
   return await genericRequest(
-    url: "https://fovp451r9d.execute-api.us-west-1.amazonaws.com/main/user",
-    method: 'GET'
-  );
+      url: "https://fovp451r9d.execute-api.us-west-1.amazonaws.com/main/user",
+      method: 'GET');
 }
 
-Future<Map<String, dynamic>> updateAccount(String username, String displayName) async {
+Future<Map<String, dynamic>> updateAccount(
+    String username, String displayName) async {
   return await genericRequest(
     url: "https://fovp451r9d.execute-api.us-west-1.amazonaws.com/main/user",
     method: 'POST',
@@ -113,18 +113,18 @@ Future<Map<String, dynamic>> removeFriend(String targetUserID) async {
 
 Future<Map<String, dynamic>> getFriends() async {
   return await genericRequest(
-    url: "https://fovp451r9d.execute-api.us-west-1.amazonaws.com/main/friends",
-    method: 'GET'
-  );
+      url:
+          "https://fovp451r9d.execute-api.us-west-1.amazonaws.com/main/friends",
+      method: 'GET');
 }
 
 Future<Map<String, dynamic>> uploadImage(String img, String destination) async {
   return await genericRequest(
-    url: "https://fovp451r9d.execute-api.us-west-1.amazonaws.com/main/imageUpload",
-    method: 'PUT',
-    body: {
-      "image": img,
-      "destination": destination,
-    }
-  );
+      url:
+          "https://fovp451r9d.execute-api.us-west-1.amazonaws.com/main/imageUpload",
+      method: 'PUT',
+      body: {
+        "image": img,
+        "destination": destination,
+      });
 }

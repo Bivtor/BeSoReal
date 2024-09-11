@@ -6,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:client/createPost.dart';
 
 class Post extends StatefulWidget {
-  final Function(bool) updatePostedToday;
+  final Function() updatePostedToday;
   final bool postedToday;
 
   const Post(

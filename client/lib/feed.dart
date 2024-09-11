@@ -1,6 +1,6 @@
-import 'package:client/addFriend.dart';
 import 'package:client/widgets/post.dart';
 import 'package:client/login.dart';
+import 'package:client/api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:client/widgets/header.dart';
@@ -29,27 +29,42 @@ class Feed extends StatefulWidget {
 }
 
 class _FeedState extends State<Feed> {
-  // TODO get this info from the server
-  var postedToday = false;
+  bool hasPosted = false;
+  var friendsWhoHavePosted = [];
 
   Future<void> _signOut() async {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
             builder: (context) => const Login(),
-            settings: RouteSettings(name: const Login().runtimeType.toString())));
+            settings:
+                RouteSettings(name: const Login().runtimeType.toString())));
     await FirebaseAuth.instance.signOut();
   }
 
-  void updatePostedToday(bool value) {
+  // Ask firestore if hasPosted is true
+  void updatePostedToday() async {
+    // Map<String, dynamic> hasPosted = await getUserInfo();
+    Map<String, dynamic> friends = await getFriends();
+    print('friends');
+    print(friends);
+
+    var posted_friends = [];
+    // for (var s in friends['friends']) {
+    //   print(s);
+    //   posted_friends.add(s);
+    // }
+
     setState(() {
-      postedToday = value;
+      // hasPosted = hasPosted['hasPosted'];
     });
   }
 
   @override
   void initState() {
     super.initState();
+    updatePostedToday();
+    if (hasPosted) {}
   }
 
   @override
@@ -65,14 +80,14 @@ class _FeedState extends State<Feed> {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) => Post(
                     updatePostedToday: updatePostedToday,
-                    postedToday: postedToday,
+                    postedToday: hasPosted,
                   ),
                   childCount: 2,
                 ),
               ),
             ],
           ),
-          if (!postedToday)
+          if (!hasPosted)
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(

@@ -8,10 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:client/feed.dart';
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:flutter/material.dart';
 //import 'amplify_outputs.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -48,7 +45,8 @@ Future<void> main() async {
         navigatorKey.currentState?.pushReplacement(
           MaterialPageRoute(
               builder: (context) => const Login(),
-              settings: RouteSettings(name: const Login().runtimeType.toString())),
+              settings:
+                  RouteSettings(name: const Login().runtimeType.toString())),
         );
       });
     } else {
@@ -59,7 +57,8 @@ Future<void> main() async {
         navigatorKey.currentState?.pushReplacement(
           MaterialPageRoute(
               builder: (context) => const Feed(),
-              settings: RouteSettings(name: const Feed().runtimeType.toString())),
+              settings:
+                  RouteSettings(name: const Feed().runtimeType.toString())),
         );
       });
     }

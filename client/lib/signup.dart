@@ -53,7 +53,7 @@ class _SignupState extends State<Signup> {
         .then((UserCredential userCredential) {
       //print('User created: ${userCredential.user!.email}');
 
-      // Create firestore entry with credentials
+      // Create db instance
       var db = FirebaseFirestore.instance;
 
       // Create a new user with a first and last name
@@ -63,7 +63,11 @@ class _SignupState extends State<Signup> {
         "username_lowercase": name.toLowerCase(),
         "photoURL": "",
         'friends': [], // will hold an array of user ids
-        'friend_requests': [] // friends requests that have been sent to this user
+        'friend_requests':
+            [], // friends requests that have been sent to this user
+        'hasPosted': false, // Has this user posted today field
+        'postHistory':
+            [] // Post history is [{date: timestampobject, photo1: 'photo1url', photo2? : 'photo2url'}]
       };
 
       // Add a new document user uid as ID
@@ -77,7 +81,6 @@ class _SignupState extends State<Signup> {
         ),
       );
 
-      // TODO Catch?
       //       if (e.code == 'weak-password') {
       //   print('The password provided is too weak.');
       // } else if (e.code == 'email-already-in-use') {
@@ -86,7 +89,11 @@ class _SignupState extends State<Signup> {
 
       // go to login page
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const Login(), settings: RouteSettings(name: const Login().runtimeType.toString())));
+          context,
+          MaterialPageRoute(
+              builder: (context) => const Login(),
+              settings:
+                  RouteSettings(name: const Login().runtimeType.toString())));
       // go to login page
     }).catchError((error) {
       setState(() {
@@ -110,7 +117,11 @@ class _SignupState extends State<Signup> {
 
   void _login() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Login(), settings: RouteSettings(name: const Login().runtimeType.toString())));
+        context,
+        MaterialPageRoute(
+            builder: (context) => const Login(),
+            settings:
+                RouteSettings(name: const Login().runtimeType.toString())));
   }
 
   void _validateEmail() {

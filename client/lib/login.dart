@@ -75,7 +75,6 @@ class _LoginState extends State<Login> {
 
       // Check if user is not null and print the UID
       if (user != null) {
-        // If the user is not null get the object matching their UID from Firestore and pass it as props
         // Create firestore entry with credentials
         var db = FirebaseFirestore.instance;
 
@@ -84,7 +83,7 @@ class _LoginState extends State<Login> {
 
         // Get user uid
         final firestoreUser = userdata.doc(user.uid);
-        print(firestoreUser);
+
         // Navigate to Feed page
         Navigator.pushReplacement(
           context,

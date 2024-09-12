@@ -42,6 +42,7 @@ class _AddFriendState extends State<AddFriend> {
     }
 
     Map<String, dynamic> result = await addFriend(username);
+    print(result);
 
     // if we left this page, return
     if (!mounted) return;

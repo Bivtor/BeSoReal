@@ -48,6 +48,7 @@ class _FeedState extends State<Feed> {
     Map<String, dynamic> friends = await getFriends();
     print('friends');
     print(friends);
+    print(friends['username']);
 
     var posted_friends = [];
     // for (var s in friends['friends']) {

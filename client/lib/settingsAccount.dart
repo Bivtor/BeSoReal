@@ -41,7 +41,7 @@ class _AccountSettingsState extends State<AccountSettings> {
       username = result['username'];
       displayName = result['displayName'];
       email = result['email'];
-      photoURL = result['photoURL'];
+      photoURL = result['photoURL'] ?? '';
     });
   }
 

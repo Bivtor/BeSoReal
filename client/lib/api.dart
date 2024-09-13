@@ -20,7 +20,7 @@ Future<Map<String, dynamic>> genericRequest(
         Uri.parse(url),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $userToken',
+          'Authorization': 'Bearer $userToken'
         },
         body: jsonEncode(body),
       );
@@ -38,7 +38,7 @@ Future<Map<String, dynamic>> genericRequest(
         Uri.parse(url),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $userToken',
+          'Authorization': 'Bearer $userToken'
         },
       );
     } else if (method == 'PUT') {
@@ -115,6 +115,13 @@ Future<Map<String, dynamic>> getFriends() async {
   return await genericRequest(
       url:
           "https://fovp451r9d.execute-api.us-west-1.amazonaws.com/main/friends",
+      method: 'GET');
+}
+
+Future<Map<String, dynamic>> getFriendsPosts() async {
+  return await genericRequest(
+      url:
+          "https://fovp451r9d.execute-api.us-west-1.amazonaws.com/main/friendsPosts",
       method: 'GET');
 }
 

@@ -45,10 +45,12 @@ class _FeedState extends State<Feed> {
   // Ask firestore if hasPosted is true
   void updatePostedToday() async {
     // Map<String, dynamic> hasPosted = await getUserInfo();
-    Map<String, dynamic> friends = await getFriends();
-    print('friends');
+    Map<String, dynamic> friends = await getFriendsPosts();
     print(friends);
-    print(friends['username']);
+    print(friends['friends']);
+    // var friendlist = friends['friends'];
+
+    // if (friends['error'] != null) return;
 
     var posted_friends = [];
     // for (var s in friends['friends']) {

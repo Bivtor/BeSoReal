@@ -34,15 +34,23 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> _login(BuildContext context) async {
-    // TODO REMOVE
-    if (DEBUG_MODE) {
-      _emailController.text = 'victor@victor.victor';
-      _passwordController.text = 'Shit22';
-    }
 
     // Retrieve email and password from controllers
     String email = _emailController.text.trim();
     String password = _passwordController.text;
+
+        // TODO REMOVE
+    if (DEBUG_MODE) {
+      if (email =='mark') {
+        email = 'mark@mark.mark';
+        password = 'Banana21';
+      } else {
+        email = 'victor@victor.victor';
+        password = 'Shit22';
+      }
+      _emailError = null;
+      _passwordError = null;
+    }
 
     // Check for validation errors
     if (_emailError != null || _passwordError != null) {

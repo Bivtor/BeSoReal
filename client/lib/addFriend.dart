@@ -14,6 +14,7 @@ class _AddFriendState extends State<AddFriend> {
   String? _userNameError;
   bool _foundUser = false;
   String _foundUserText = '';
+  bool loadingFriends = true;
 
   List<dynamic> _friends = [];
   List<dynamic> _friendRequests = [];
@@ -37,6 +38,7 @@ class _AddFriendState extends State<AddFriend> {
       _friendRequests = friends['friendRequests'];
       print(_friends);
       print(_friendRequests);
+      loadingFriends = false;
     });
   }
 
@@ -101,231 +103,242 @@ class _AddFriendState extends State<AddFriend> {
     }
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: Header(context),
-    backgroundColor: Colors.black,
-    body: Column(
-      children: [
-        // "Friends" header aligned to the left
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16.0),
-          child: const Text(
-            'Friends',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: Header(context),
+      backgroundColor: Colors.black,
+      body: Column(
+        children: [
+          // "Friends" header aligned to the left
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16.0),
+            child: const Text(
+              'Friends',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.left,
             ),
-            textAlign: TextAlign.left,
           ),
-        ),
-        // Friends List
-        Expanded(
-          child: _friends.isNotEmpty
-              ? ListView.builder(
-                  itemCount: _friends.length,
-                  itemBuilder: (context, index) {
-                    var friend = _friends[index];
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: friend['photoURL'] != ""
-                            ? NetworkImage(friend['photoURL'])
-                            : null,
-                      ),
-                      title: Text(friend['displayName'],
-                          style: const TextStyle(color: Colors.white)),
-                      subtitle: Text(friend['username'],
-                          style: const TextStyle(color: Colors.white70)),
-                      trailing: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.red),
-                        ),
-                        onPressed: () {
-                          // Logic to remove friend
-                          removeFriend(friend['username']);
-                        },
-                        child: const Text('Remove Friend',
-                            style: TextStyle(color: Colors.white)),
-                      ),
-                    );
-                  },
-                )
-              : const Center(
-                  child: Text(
-                    'No friends found.',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-        ),
-
-        // Add a horizontal line (Divider)
-        const Divider(
-          color: Colors.white,
-          thickness: 1,
-        ),
-
-        // "Friend Requests" Section
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16.0),
-          child: const Text(
-            'Friend Requests',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.left,
-          ),
-        ),
-
-        // Friend Requests List
-        _friendRequests.isNotEmpty
-            ? ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.4,
-                ),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _friendRequests.length,
-                  itemBuilder: (context, index) {
-                    var request = _friendRequests[index];
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: request['photoURL'] != ""
-                            ? NetworkImage(request['photoURL'])
-                            : null,
-                      ),
-                      title: Text(request['displayName'],
-                          style: const TextStyle(color: Colors.white)),
-                      subtitle: Text(request['username'],
-                          style: const TextStyle(color: Colors.white70)),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ElevatedButton(
+          // Friends List
+          if (!loadingFriends)
+            Expanded(
+              child: _friends.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: _friends.length,
+                      itemBuilder: (context, index) {
+                        var friend = _friends[index];
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: friend['photoURL'] != ""
+                                ? NetworkImage(friend['photoURL'])
+                                : null,
+                          ),
+                          title: Text(friend['displayName'],
+                              style: const TextStyle(color: Colors.white)),
+                          subtitle: Text(friend['username'],
+                              style: const TextStyle(color: Colors.white70)),
+                          trailing: ElevatedButton(
                             style: ButtonStyle(
                               backgroundColor:
-                                  MaterialStateProperty.all(Colors.green),
+                                  MaterialStateProperty.all(Colors.red),
                             ),
                             onPressed: () {
-                              _addFriend(context, request['username']);
+                              // Logic to remove friend
+                              removeFriend(friend['username']);
                             },
-                            child: const Text('Add Friend',
+                            child: const Text('Remove Friend',
                                 style: TextStyle(color: Colors.white)),
                           ),
-                          const SizedBox(width: 8),
-                          ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.grey),
-                            ),
-                            onPressed: () {
-                              _removeFriend(context, request['username']);
-                            },
-                            child: const Text('Ignore',
-                                style: TextStyle(color: Colors.white)),
-                          ),
-                        ],
+                        );
+                      },
+                    )
+                  : const Center(
+                      child: Text(
+                        'No friends found.',
+                        style: TextStyle(color: Colors.white),
                       ),
-                    );
-                  },
-                ),
-              )
-            : const Center(
-                child: Text(
-                  'No friend requests.',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-
-        // Add a horizontal line (Divider)
-        const Divider(
-          color: Colors.white,
-          thickness: 1,
-        ),
-
-        // "Send Friend Request" Section
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16.0),
-          child: const Text(
-            'Send Friend Request',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+                    ),
             ),
-            textAlign: TextAlign.left,
-          ),
-        ),
+          if (loadingFriends)
+            Center(
+              child: CircularProgressIndicator(),
+            ),
 
-        // Add user input for adding new friends
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              if (_foundUser)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    _foundUserText,
-                    style: const TextStyle(color: Colors.green, fontSize: 16),
-                  ),
-                ),
-              if (_userNameError != null)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    _userNameError!,
-                    style: const TextStyle(color: Colors.red, fontSize: 12),
-                  ),
-                ),
-              TextField(
-                controller: _userNameController,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                  ),
-                  focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue),
-                  ),
-                  prefixIcon: const Icon(Icons.person),
-                  suffixIcon: (_userNameError == null &&
-                          _userNameController.text.isNotEmpty)
-                      ? const Icon(Icons.check)
-                      : null,
-                ),
+          // Add a horizontal line (Divider)
+          const Divider(
+            color: Colors.white,
+            thickness: 1,
+          ),
+
+          // "Friend Requests" Section
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16.0),
+            child: const Text(
+              'Friend Requests',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
-              const SizedBox(height: 16.0),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => _addFriend(context, _userNameController.text),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    textStyle: const TextStyle(fontSize: 18),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7),
+              textAlign: TextAlign.left,
+            ),
+          ),
+
+          // Friend Requests List
+          if (!loadingFriends)
+            _friendRequests.isNotEmpty
+                ? ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height * 0.4,
+                    ),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _friendRequests.length,
+                      itemBuilder: (context, index) {
+                        var request = _friendRequests[index];
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: request['photoURL'] != ""
+                                ? NetworkImage(request['photoURL'])
+                                : null,
+                          ),
+                          title: Text(request['displayName'],
+                              style: const TextStyle(color: Colors.white)),
+                          subtitle: Text(request['username'],
+                              style: const TextStyle(color: Colors.white70)),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.green),
+                                ),
+                                onPressed: () {
+                                  _addFriend(context, request['username']);
+                                },
+                                child: const Text('Add Friend',
+                                    style: TextStyle(color: Colors.white)),
+                              ),
+                              const SizedBox(width: 8),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.grey),
+                                ),
+                                onPressed: () {
+                                  _removeFriend(context, request['username']);
+                                },
+                                child: const Text('Ignore',
+                                    style: TextStyle(color: Colors.white)),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : const Center(
+                    child: Text(
+                      'No friend requests.',
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  child: const Text('Search!',
-                      style: TextStyle(color: Colors.white)),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    ),
-  );
-}
 
+          if (loadingFriends)
+            Center(
+              child: CircularProgressIndicator(),
+            ),
+
+          // Add a horizontal line (Divider)
+          const Divider(
+            color: Colors.white,
+            thickness: 1,
+          ),
+
+          // "Send Friend Request" Section
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16.0),
+            child: const Text(
+              'Send Friend Request',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.left,
+            ),
+          ),
+
+          // Add user input for adding new friends
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                if (_foundUser)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      _foundUserText,
+                      style: const TextStyle(color: Colors.green, fontSize: 16),
+                    ),
+                  ),
+                if (_userNameError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      _userNameError!,
+                      style: const TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
+                TextField(
+                  controller: _userNameController,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    labelText: 'Username',
+                    enabledBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                    ),
+                    prefixIcon: const Icon(Icons.person),
+                    suffixIcon: (_userNameError == null &&
+                            _userNameController.text.isNotEmpty)
+                        ? const Icon(Icons.check)
+                        : null,
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () =>
+                        _addFriend(context, _userNameController.text),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      textStyle: const TextStyle(fontSize: 18),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                    ),
+                    child: const Text('Search!',
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

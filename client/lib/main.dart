@@ -79,6 +79,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/addFriend': (context) => const AddFriend(),
         '/myprofile': (context) => const MyProfile(),
+        '/feed': (context) => const Feed(),
       },
       navigatorKey: navigatorKey,
 

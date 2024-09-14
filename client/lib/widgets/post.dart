@@ -51,7 +51,7 @@ class _PostState extends State<Post> {
             children: [
               // Friend Icon
               CircleAvatar(
-                backgroundImage: widget.data['photoURL'].length > 0
+                backgroundImage: widget.data['photoURL'] != null
                     ? NetworkImage(widget.data['photoURL'])
                     : AssetImage('assets/avatar.png'),
                 radius: 20.0,

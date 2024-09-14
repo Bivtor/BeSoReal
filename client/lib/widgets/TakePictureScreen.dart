@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:client/feed.dart';
 import 'package:client/api.dart';
 import 'dart:convert';
 
@@ -74,6 +73,8 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       context,
       (route) => route.isFirst,
     );
+    // Force Home to refresh
+    Navigator.pushReplacementNamed(context, '/feed');
   }
 
   @override

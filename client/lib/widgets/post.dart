@@ -8,9 +8,13 @@ import 'package:client/createPost.dart';
 class Post extends StatefulWidget {
   final Function() updatePostedToday;
   final bool postedToday;
+  final Map<String, dynamic> data;
 
   const Post(
-      {super.key, required this.updatePostedToday, required this.postedToday});
+      {super.key,
+      required this.updatePostedToday,
+      required this.postedToday,
+      required this.data});
 
   @override
   State<Post> createState() => _PostState();
@@ -18,10 +22,22 @@ class Post extends StatefulWidget {
 
 class _PostState extends State<Post> {
   var focusSelfie = false;
+  String? photo1;
+  String? photo2;
 
   @override
   void initState() {
     super.initState();
+
+    // Type check photo1
+    photo1 = widget.data['todaysPost']?['photo1'] != null
+        ? widget.data['todaysPost']['photo1']
+        : 'https://mybesorealbucket.s3.us-west-1.amazonaws.com/0c3480acd8d843ddbde93215cfe59a1d'; // default TODO Change
+
+    // Type check photo2
+    photo2 = widget.data['todaysPost']?['photo2'] ??
+        widget.data['todaysPost']?['photo1'] ??
+        photo1;
   }
 
   @override
@@ -34,12 +50,14 @@ class _PostState extends State<Post> {
           Row(
             children: [
               // Friend Icon
-              const CircleAvatar(
-                backgroundImage: AssetImage('assets/avatar.png'),
+              CircleAvatar(
+                backgroundImage: widget.data['photoURL'].length > 0
+                    ? NetworkImage(widget.data['photoURL'])
+                    : AssetImage('assets/avatar.png'),
                 radius: 20.0,
               ),
               const SizedBox(width: 8.0),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -49,7 +67,9 @@ class _PostState extends State<Post> {
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
-                      child: Text('Friend Name'),
+                      child: Text(widget.data['displayName'] != null
+                          ? widget.data['displayName']
+                          : 'display name'),
                     ),
                     DefaultTextStyle(
                       style: TextStyle(
@@ -77,15 +97,12 @@ class _PostState extends State<Post> {
               // image
               ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
-                child: Image.asset(
-                  focusSelfie
-                      ? 'assets/post_image2.png'
-                      : 'assets/post_image.png',
+                child: Image.network(
+                  focusSelfie ? photo1! : photo2!,
                   fit: BoxFit.cover,
                 ),
               ),
-
-// Blur data when hasn't posted today
+              // Blur data when hasn't posted today
               if (!widget.postedToday) ...[
                 // blur
                 Positioned.fill(
@@ -189,10 +206,8 @@ class _PostState extends State<Post> {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(15.0),
-                            child: Image.asset(
-                              focusSelfie
-                                  ? 'assets/post_image.png'
-                                  : 'assets/post_image2.png',
+                            child: Image.network(
+                              focusSelfie ? photo1! : photo2!,
                               fit: BoxFit.cover,
                             ),
                           ),

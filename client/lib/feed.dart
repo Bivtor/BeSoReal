@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:client/widgets/post.dart';
 import 'package:client/login.dart';
 import 'package:client/api.dart';
@@ -29,8 +31,10 @@ class Feed extends StatefulWidget {
 }
 
 class _FeedState extends State<Feed> {
+  // State variables
   bool hasPosted = false;
-  var friendsWhoHavePosted = [];
+  bool loadingFriends = true;
+  dynamic friends_list;
 
   Future<void> _signOut() async {
     Navigator.pushReplacement(
@@ -44,22 +48,15 @@ class _FeedState extends State<Feed> {
 
   // Ask firestore if hasPosted is true
   void updatePostedToday() async {
-    // Map<String, dynamic> hasPosted = await getUserInfo();
+    // TODO add loading circle before info has come in
+    Map<String, dynamic> user = await getUserInfo();
     Map<String, dynamic> friends = await getFriendsPosts();
-    print(friends);
-    print(friends['friends']);
-    // var friendlist = friends['friends'];
-
-    // if (friends['error'] != null) return;
-
-    var posted_friends = [];
-    // for (var s in friends['friends']) {
-    //   print(s);
-    //   posted_friends.add(s);
-    // }
+    dynamic friends_posts = friends['friends'];
 
     setState(() {
-      // hasPosted = hasPosted['hasPosted'];
+      friends_list = friends_posts;
+      loadingFriends = false;
+      hasPosted = user['hasPosted'];
     });
   }
 
@@ -67,7 +64,6 @@ class _FeedState extends State<Feed> {
   void initState() {
     super.initState();
     updatePostedToday();
-    if (hasPosted) {}
   }
 
   @override
@@ -77,19 +73,28 @@ class _FeedState extends State<Feed> {
       appBar: Header(context),
       body: Stack(
         children: [
-          CustomScrollView(
-            slivers: [
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) => Post(
-                    updatePostedToday: updatePostedToday,
-                    postedToday: hasPosted,
+          if (!loadingFriends) // If loading finished
+            CustomScrollView(
+              slivers: [
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      var friend = friends_list[index];
+                      return Post(
+                        updatePostedToday: updatePostedToday,
+                        postedToday: hasPosted,
+                        data: friend,
+                      );
+                    },
+                    childCount: friends_list.length,
                   ),
-                  childCount: 2,
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          if (loadingFriends) // If loading
+            Center(
+              child: CircularProgressIndicator(),
+            ),
           if (!hasPosted)
             Align(
               alignment: Alignment.bottomCenter,
